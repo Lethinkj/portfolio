@@ -299,8 +299,71 @@ canvas#bg{position:fixed;inset:0;z-index:0}
 .footer{display:flex;justify-content:center;color:var(--muted);margin-top:30px;animation:slideInLeft 0.8s ease 0.8s forwards;opacity:0}
 
 /* Cursor follower */
-.cursor-dot{position:fixed;left:0;top:0;width:18px;height:18px;border-radius:50%;pointer-events:none;mix-blend-mode:screen;box-shadow:0 0 30px var(--neon);transform:translate(-50%,-50%);z-index:3;transition:all 0.05s ease}
-.cursor-ring{position:fixed;left:0;top:0;width:64px;height:64px;border-radius:50%;pointer-events:none;border:1px solid rgba(255,255,255,0.06);transform:translate(-50%,-50%);z-index:2;transition:all 0.1s ease}
+/* Custom Cursor */
+.cursor-dot{
+  position:fixed;
+  left:0;top:0;
+  width:12px;height:12px;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9999;
+  transition:width 0.3s ease,height 0.3s ease,opacity 0.3s ease;
+  background:radial-gradient(circle,var(--neon) 0%,var(--accent) 50%,transparent 70%);
+  box-shadow:0 0 20px var(--neon),0 0 40px var(--neon),0 0 60px var(--accent);
+  animation:cursorPulse 2s ease-in-out infinite;
+  transform:translate(-50%,-50%);
+}
+
+.cursor-ring{
+  position:fixed;
+  left:0;top:0;
+  width:40px;height:40px;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9998;
+  border:2px solid var(--neon);
+  transform:translate(-50%,-50%);
+  transition:all 0.2s cubic-bezier(0.25,0.46,0.45,0.94);
+  box-shadow:0 0 15px var(--neon),inset 0 0 15px rgba(0,255,225,0.3);
+  animation:cursorRotate 4s linear infinite,cursorBreath 3s ease-in-out infinite;
+}
+
+.cursor-trail{
+  position:fixed;
+  width:6px;height:6px;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9997;
+  background:var(--neon);
+  box-shadow:0 0 10px var(--neon);
+  opacity:0.7;
+  animation:trailFade 0.5s ease-out forwards;
+}
+
+@keyframes cursorPulse{
+  0%,100%{transform:translate(-50%,-50%) scale(1);opacity:1}
+  50%{transform:translate(-50%,-50%) scale(1.3);opacity:0.8}
+}
+
+@keyframes cursorRotate{
+  from{transform:translate(-50%,-50%) rotate(0deg)}
+  to{transform:translate(-50%,-50%) rotate(360deg)}
+}
+
+@keyframes cursorBreath{
+  0%,100%{width:40px;height:40px;border-width:2px}
+  50%{width:50px;height:50px;border-width:3px}
+}
+
+@keyframes trailFade{
+  from{opacity:0.7;transform:scale(1)}
+  to{opacity:0;transform:scale(0.2)}
+}
+
+@keyframes clickRipple{
+  from{width:10px;height:10px;opacity:1}
+  to{width:80px;height:80px;opacity:0}
+}
 
 /* Retro scanlines */
 @media (prefers-reduced-motion: no-preference){

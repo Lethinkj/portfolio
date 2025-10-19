@@ -480,7 +480,60 @@ window.addEventListener('scroll', () => {
   }
 });
 
-// 4. Text Scramble Effect on Page Load
+// 4. Flying Letters Animation for Hero Title
+window.addEventListener('DOMContentLoaded', () => {
+  const heroTitle = document.querySelector('.hero-title');
+  if(heroTitle) {
+    const text = heroTitle.innerHTML;
+    heroTitle.innerHTML = '';
+    
+    // Split text into individual letters
+    const directions = ['fly-top', 'fly-bottom', 'fly-left', 'fly-right', 'fly-tl', 'fly-tr', 'fly-bl', 'fly-br'];
+    let letterIndex = 0;
+    
+    // Parse HTML to handle span tags for name highlight
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = text;
+    
+    function processNode(node) {
+      if(node.nodeType === Node.TEXT_NODE) {
+        const chars = node.textContent.split('');
+        chars.forEach((char, i) => {
+          const span = document.createElement('span');
+          span.className = 'letter ' + directions[letterIndex % directions.length];
+          span.textContent = char;
+          span.style.animationDelay = `${letterIndex * 0.05}s`;
+          heroTitle.appendChild(span);
+          letterIndex++;
+        });
+      } else if(node.nodeType === Node.ELEMENT_NODE) {
+        const wrapper = document.createElement(node.tagName);
+        wrapper.className = node.className;
+        
+        Array.from(node.childNodes).forEach(child => {
+          if(child.nodeType === Node.TEXT_NODE) {
+            const chars = child.textContent.split('');
+            chars.forEach((char) => {
+              const span = document.createElement('span');
+              span.className = 'letter ' + directions[letterIndex % directions.length];
+              span.textContent = char;
+              span.style.animationDelay = `${letterIndex * 0.05}s`;
+              wrapper.appendChild(span);
+              letterIndex++;
+            });
+          }
+        });
+        
+        heroTitle.appendChild(wrapper);
+      }
+    }
+    
+    Array.from(tempDiv.childNodes).forEach(node => processNode(node));
+  }
+});
+
+// Old scramble text - disabled
+/*
 function scrambleText(element, finalText) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
   let iteration = 0;
@@ -508,6 +561,7 @@ window.addEventListener('load', () => {
     setTimeout(() => scrambleText(heroTitle, originalText), 500);
   }
 });
+*/
 
 // 5. Add shimmer text class to subtitles
 document.querySelectorAll('.hero-subtitle').forEach(subtitle => {
@@ -525,10 +579,8 @@ document.querySelectorAll('.social-btn').forEach((btn, index) => {
   btn.style.animationDelay = `${index * 0.2}s`;
 });
 
-// 8. Stagger Fade for Skill Lists
-document.querySelectorAll('.skill-list li').forEach(li => {
-  li.classList.add('stagger-fade');
-});
+// 8. Stagger Fade for Skill Lists (removed - handled by CSS now)
+// Skills already have animations via CSS
 
 // 9. Rainbow Text on Headings
 document.querySelectorAll('h2, h3').forEach(heading => {
@@ -539,3 +591,344 @@ document.querySelectorAll('h2, h3').forEach(heading => {
 document.querySelectorAll('.link-card').forEach(card => {
   card.classList.add('quick-link');
 });
+
+// ============================================
+// ADDITIONAL INTERACTIVE ANIMATIONS
+// ============================================
+
+// 11. Rotate Elements on Scroll
+let lastScrollY = 0;
+window.addEventListener('scroll', () => {
+  if(window.innerWidth >= 768) {
+    const scrollY = window.scrollY;
+    const delta = scrollY - lastScrollY;
+    
+    // Rotate cert icons based on scroll
+    document.querySelectorAll('.cert-icon').forEach((icon, index) => {
+      const rotation = (scrollY * 0.2) + (index * 20);
+      icon.style.transform = `rotate(${rotation}deg)`;
+    });
+    
+    // Skill bullets rotate
+    document.querySelectorAll('.skill-list li::before').forEach((bullet, index) => {
+      const rotation = scrollY * 0.5;
+      if(bullet.style) bullet.style.transform = `rotate(${rotation}deg)`;
+    });
+    
+    lastScrollY = scrollY;
+  }
+});
+
+// 12. Glitch Effect on Logo Hover
+const logo = document.querySelector('.logo');
+if(logo) {
+  let glitchInterval;
+  logo.addEventListener('mouseenter', () => {
+    let count = 0;
+    glitchInterval = setInterval(() => {
+      logo.style.transform = `translate(${Math.random() * 4 - 2}px, ${Math.random() * 4 - 2}px)`;
+      count++;
+      if(count > 10) {
+        clearInterval(glitchInterval);
+        logo.style.transform = '';
+      }
+    }, 50);
+  });
+}
+
+// 13. Particle Burst on Button Click
+document.querySelectorAll('.cta-primary, .cta-secondary').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    if(window.innerWidth < 768) return;
+    
+    for(let i = 0; i < 15; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.cssText = `
+        position: fixed;
+        width: 6px;
+        height: 6px;
+        background: ${i % 2 === 0 ? 'var(--neon)' : 'var(--accent)'};
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        left: ${e.clientX}px;
+        top: ${e.clientY}px;
+      `;
+      
+      document.body.appendChild(particle);
+      
+      const angle = (Math.PI * 2 * i) / 15;
+      const velocity = 2 + Math.random() * 3;
+      const vx = Math.cos(angle) * velocity;
+      const vy = Math.sin(angle) * velocity;
+      
+      let x = e.clientX;
+      let y = e.clientY;
+      let opacity = 1;
+      
+      const animate = () => {
+        x += vx;
+        y += vy;
+        opacity -= 0.02;
+        
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+        particle.style.opacity = opacity;
+        particle.style.transform = `scale(${opacity})`;
+        
+        if(opacity > 0) {
+          requestAnimationFrame(animate);
+        } else {
+          particle.remove();
+        }
+      };
+      
+      animate();
+    }
+  });
+});
+
+// 14. Typewriter Effect on Hero Description (Disabled - CSS animation takes priority)
+// const heroDesc = document.querySelector('.hero-description');
+// if(heroDesc && window.innerWidth >= 768) {
+//   const text = heroDesc.textContent;
+//   heroDesc.textContent = '';
+//   heroDesc.style.opacity = '1';
+//   
+//   let index = 0;
+//   const typeSpeed = 30;
+//   
+//   setTimeout(() => {
+//     const typeWriter = () => {
+//       if(index < text.length) {
+//         heroDesc.textContent += text.charAt(index);
+//         index++;
+//         setTimeout(typeWriter, typeSpeed);
+//       }
+//     };
+//     typeWriter();
+//   }, 1500);
+// }
+
+// 15. Color Shift on Scroll
+window.addEventListener('scroll', () => {
+  if(window.innerWidth >= 768) {
+    const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+    const hueRotate = scrollPercent * 3.6; // 0-360 degrees
+    
+    document.documentElement.style.setProperty('--scroll-hue', hueRotate + 'deg');
+  }
+});
+
+// 16. Shake Animation on Form Error
+const form = document.querySelector('.contact-form');
+if(form) {
+  form.addEventListener('submit', (e) => {
+    const inputs = form.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+      if(!input.validity.valid) {
+        input.style.animation = 'jello 0.5s ease';
+        setTimeout(() => {
+          input.style.animation = '';
+        }, 500);
+      }
+    });
+  });
+}
+
+// 17. Infinite Bounce for Skills
+document.querySelectorAll('.skill-list li').forEach((li, index) => {
+  li.style.animation = `infiniteBounce 2s ease-in-out infinite`;
+  li.style.animationDelay = `${index * 0.1}s`;
+});
+
+// 18. Magnetic Cursor Effect
+if(window.innerWidth >= 768) {
+  const magneticElements = document.querySelectorAll('.nav-btn, .cta-primary, .social-btn');
+  
+  magneticElements.forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      
+      el.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+    });
+    
+    el.addEventListener('mouseleave', () => {
+      el.style.transform = '';
+    });
+  });
+}
+
+// 19. Scale Project Cards on Visibility
+const cardObserverOptions = {
+  threshold: 0.1,
+  rootMargin: '0px 0px -100px 0px'
+};
+
+const cardObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting) {
+      entry.target.style.animation = 'bounceIn 0.6s ease backwards';
+      cardObserver.unobserve(entry.target);
+    }
+  });
+}, cardObserverOptions);
+
+document.querySelectorAll('.project-card, .cert-card').forEach(card => {
+  cardObserver.observe(card);
+});
+
+// 20. Add Shadow Pulse to Active Nav
+const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+document.querySelectorAll('.topbar nav a').forEach(link => {
+  if(link.getAttribute('href') === currentPage) {
+    link.style.animation = 'shadowExpand 2s ease-in-out infinite';
+  }
+});
+
+// ============================================
+// FLYING LETTERS ANIMATION FOR HERO TITLE
+// ============================================
+window.addEventListener('load', () => {
+  const heroTitle = document.querySelector('.hero-title');
+  if(!heroTitle) return;
+  
+  // Store the original HTML including the br tag
+  const originalHTML = heroTitle.innerHTML;
+  heroTitle.innerHTML = '';
+  heroTitle.style.minHeight = '120px'; // Prevent layout shift for 2 lines
+  
+  // Create a temporary div to parse HTML
+  const temp = document.createElement('div');
+  temp.innerHTML = originalHTML;
+  
+  let charIndex = 0;
+  
+  // Process each child node (text and br)
+  temp.childNodes.forEach(node => {
+    if(node.nodeType === Node.TEXT_NODE) {
+      // Process text
+      const text = node.textContent;
+      for(let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const span = document.createElement('span');
+        
+        if(char === ' ') {
+          span.innerHTML = '&nbsp;';
+        } else {
+          span.textContent = char;
+        }
+        
+        span.style.display = 'inline-block';
+        span.style.opacity = '0';
+        span.style.whiteSpace = 'pre';
+        span.style.verticalAlign = 'baseline';
+        
+        const directions = [
+          { x: 0, y: -200 },
+          { x: 200, y: 0 },
+          { x: 0, y: 200 },
+          { x: -200, y: 0 },
+          { x: 150, y: -150 },
+          { x: -150, y: -150 },
+          { x: 150, y: 150 },
+          { x: -150, y: 150 }
+        ];
+        
+        const direction = directions[charIndex % directions.length];
+        span.style.transform = `translate(${direction.x}px, ${direction.y}px) rotate(${Math.random() * 360}deg) scale(0)`;
+        
+        const delay = charIndex * 50;
+        setTimeout(() => {
+          span.style.transition = `all ${0.8 + Math.random() * 0.4}s cubic-bezier(0.34, 1.56, 0.64, 1)`;
+          span.style.opacity = '1';
+          span.style.transform = 'translate(0, 0) rotate(0deg) scale(1)';
+        }, delay);
+        
+        heroTitle.appendChild(span);
+        charIndex++;
+      }
+    } else if(node.nodeName === 'BR') {
+      // Add line break
+      heroTitle.appendChild(document.createElement('br'));
+    } else if(node.nodeName === 'SPAN') {
+      // Process span (name-highlight)
+      const spanWrapper = document.createElement('span');
+      spanWrapper.className = node.className;
+      
+      const text = node.textContent;
+      for(let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const span = document.createElement('span');
+        
+        if(char === ' ') {
+          span.innerHTML = '&nbsp;';
+        } else {
+          span.textContent = char;
+        }
+        
+        span.style.display = 'inline-block';
+        span.style.opacity = '0';
+        span.style.whiteSpace = 'pre';
+        span.style.verticalAlign = 'baseline';
+        span.style.background = 'linear-gradient(90deg, var(--neon), var(--accent))';
+        span.style.webkitBackgroundClip = 'text';
+        span.style.webkitTextFillColor = 'transparent';
+        span.style.backgroundClip = 'text';
+        
+        const directions = [
+          { x: 0, y: -200 },
+          { x: 200, y: 0 },
+          { x: 0, y: 200 },
+          { x: -200, y: 0 },
+          { x: 150, y: -150 },
+          { x: -150, y: -150 },
+          { x: 150, y: 150 },
+          { x: -150, y: 150 }
+        ];
+        
+        const direction = directions[charIndex % directions.length];
+        span.style.transform = `translate(${direction.x}px, ${direction.y}px) rotate(${Math.random() * 360}deg) scale(0)`;
+        
+        const delay = charIndex * 50;
+        setTimeout(() => {
+          span.style.transition = `all ${0.8 + Math.random() * 0.4}s cubic-bezier(0.34, 1.56, 0.64, 1)`;
+          span.style.opacity = '1';
+          span.style.transform = 'translate(0, 0) rotate(0deg) scale(1)';
+        }, delay);
+        
+        spanWrapper.appendChild(span);
+        charIndex++;
+      }
+      heroTitle.appendChild(spanWrapper);
+    }
+  });
+  
+  // Show subtitle and description after title animation
+  setTimeout(() => {
+    const subtitle = document.querySelector('.hero-subtitle');
+    const description = document.querySelector('.hero-description');
+    const cta = document.querySelector('.hero-cta');
+    
+    if(subtitle) {
+      subtitle.style.opacity = '1';
+      subtitle.style.transform = 'translateY(0)';
+    }
+    
+    if(description) {
+      description.style.opacity = '1';
+      description.style.transform = 'translateY(0)';
+    }
+    
+    if(cta) {
+      cta.style.opacity = '1';
+      cta.style.transform = 'translateY(0)';
+    }
+  }, charIndex * 50 + 500);
+});
+
+
+

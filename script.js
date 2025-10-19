@@ -17,7 +17,7 @@ window.addEventListener('scroll', ()=>{
 
 // particles - more dynamic
 const particles = [];
-const PT = window.innerWidth < 768 ? 50 : 90;
+const PT = window.innerWidth < 768 ? 30 : (window.innerWidth < 1024 ? 50 : 90);
 for(let i=0;i<PT;i++) particles.push({
   x: Math.random()*w,
   y: Math.random()*h,
@@ -267,6 +267,9 @@ document.getElementById('year').textContent = new Date().getFullYear();
   }
   
   document.addEventListener('mousemove', (e) => {
+    // Disable sparkles on mobile for better performance
+    if(window.innerWidth < 768) return;
+    
     const now = Date.now();
     if(now - lastSparkle > sparkleDelay && Math.random() > 0.5) {
       lastSparkle = now;

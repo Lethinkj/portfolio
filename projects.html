@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Explore my project portfolio" />
+  <title>Projects - Lethin K J</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <canvas id="bg"></canvas>
+  
+  <div id="overlay" role="main">
+    <header class="topbar">
+      <h1 class="logo">Lethin K J</h1>
+      <nav>
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="skills.html" class="nav-link">Skills</a>
+        <a href="projects.html" class="nav-link active">Projects</a>
+        <a href="certifications.html" class="nav-link">Certifications</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+    </header>
+
+    <section class="card page-section fade-in">
+      <h2>My Projects</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="project-header">
+            <h3>🚗 Arduino Autonomous Car</h3>
+            <p class="project-meta">Hardware + Embedded C</p>
+          </div>
+          <p class="project-desc">A self-driving robotic car built with Arduino, ultrasonic sensors, and motor drivers. Features autonomous obstacle avoidance, line-following capabilities, and real-time sensor feedback processing.</p>
+          <div class="project-tags">
+            <span class="tag">Arduino</span>
+            <span class="tag">C/C++</span>
+            <span class="tag">Robotics</span>
+            <span class="tag">Embedded Systems</span>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-header">
+            <h3>💻 BashXCode</h3>
+            <p class="project-meta">Full-Stack Web App</p>
+          </div>
+          <p class="project-desc">An interactive coding platform built with React, Node.js, and MongoDB. Real-time code execution, syntax highlighting, and collaborative features for competitive programmers. Deployed on Vercel.</p>
+          <div class="project-links">
+            <a href="https://bashxcode.vercel.app" target="_blank" rel="noopener" class="project-link">🔗 Visit Live</a>
+          </div>
+          <div class="project-tags">
+            <span class="tag">React</span>
+            <span class="tag">Node.js</span>
+            <span class="tag">MongoDB</span>
+            <span class="tag">Full-Stack</span>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-header">
+            <h3>🎨 This Portfolio</h3>
+            <p class="project-meta">Creative Web Design</p>
+          </div>
+          <p class="project-desc">A retro-ambient portfolio with neon aesthetics, canvas particles, cursor followers, and smooth animations. Multi-page architecture with responsive design. Hand-crafted with HTML5, CSS3, and vanilla JavaScript.</p>
+          <div class="project-tags">
+            <span class="tag">HTML5</span>
+            <span class="tag">CSS3</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">Canvas API</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <small>© <span id="year"></span> Lethin K J</small>
+    </footer>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

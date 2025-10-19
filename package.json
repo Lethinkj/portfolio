@@ -1,0 +1,13 @@
+{
+  "name": "lethin-portfolio",
+  "version": "1.0.0",
+  "description": "Retro ambient portfolio with canvas animations and cursor follower",
+  "main": "index.html",
+  "scripts": {
+    "dev": "open index.html",
+    "serve": "npx serve . -p 3000 -s"
+  },
+  "keywords": ["portfolio", "retro", "ambient", "canvas", "animations"],
+  "author": "Lethin K J",
+  "license": "MIT"
+}

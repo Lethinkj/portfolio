@@ -299,6 +299,175 @@ canvas#bg{position:fixed;inset:0;z-index:0}
   body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(transparent 50%, rgba(255,255,255,0.02) 51%);background-size:100% 4px;pointer-events:none;z-index:1}
 }
 
+/* ============================================
+   UNIQUE CREATIVE ANIMATIONS
+   ============================================ */
+
+/* 1. Magnetic 3D Tilt Effect on Cards */
+.card{transition:transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94),box-shadow 0.3s}
+.card:hover{transform:perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-5px) scale(1.02)}
+
+/* 2. Morphing Gradient Background */
+@keyframes morphGradient{
+  0%{background-position:0% 50%;background-size:200% 200%}
+  50%{background-position:100% 50%;background-size:250% 250%}
+  100%{background-position:0% 50%;background-size:200% 200%}
+}
+.hero-section{position:relative}
+.hero-section::before{content:'';position:absolute;inset:0;background:linear-gradient(45deg,rgba(0,255,225,0.05),rgba(255,68,204,0.05),rgba(0,255,225,0.05));animation:morphGradient 15s ease infinite;z-index:0;pointer-events:none}
+
+/* 3. Text Glitch Effect on Hover */
+@keyframes glitch{
+  0%{transform:translate(0)}
+  20%{transform:translate(-2px,2px)}
+  40%{transform:translate(-2px,-2px)}
+  60%{transform:translate(2px,2px)}
+  80%{transform:translate(2px,-2px)}
+  100%{transform:translate(0)}
+}
+.logo:hover{animation:glitch 0.3s ease-in-out 3}
+
+/* 4. Hologram Scan on Hover */
+@keyframes hologramScan{
+  0%{transform:translateY(-100%)}
+  100%{transform:translateY(100%)}
+}
+.project-card,.cert-card{position:relative;overflow:hidden}
+.project-card::after,.cert-card::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,rgba(0,255,225,0.2) 50%,transparent 100%);animation:hologramScan 4s linear infinite;pointer-events:none;opacity:0;transition:opacity 0.3s}
+.project-card:hover::after,.cert-card:hover::after{opacity:1}
+
+/* 5. Liquid Morph Animation */
+@keyframes liquidMorph{
+  0%,100%{border-radius:60% 40% 30% 70% / 60% 30% 70% 40%}
+  50%{border-radius:30% 60% 70% 40% / 50% 60% 30% 60%}
+}
+.profile-frame{animation:liquidMorph 8s ease-in-out infinite}
+
+/* 6. Neon Border Pulse on CTA */
+@keyframes neonPulse{
+  0%,100%{box-shadow:0 0 5px var(--neon),0 0 10px var(--neon),0 0 15px var(--neon)}
+  50%{box-shadow:0 0 10px var(--neon),0 0 20px var(--neon),0 0 30px var(--neon),0 0 40px var(--neon)}
+}
+.cta-primary:hover{animation:neonPulse 1.5s ease-in-out infinite}
+
+/* 7. Breathing Animation */
+@keyframes breathe{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.03)}
+}
+.hero-visual{animation:breathe 4s ease-in-out infinite}
+
+/* 8. Text Shimmer Effect */
+@keyframes textShimmer{
+  0%{background-position:-500%}
+  100%{background-position:500%}
+}
+.shimmer-text{background:linear-gradient(90deg,currentColor 0%,var(--neon) 50%,currentColor 100%);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:textShimmer 3s linear infinite}
+
+/* 9. Zoom In Animation */
+@keyframes zoomIn{
+  from{transform:scale(0.5);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+.profile-image-container{animation:zoomIn 0.8s cubic-bezier(0.34,1.56,0.64,1) 0.3s backwards}
+
+/* 10. Elastic Bounce */
+@keyframes elasticBounce{
+  0%{transform:scale(1)}
+  30%{transform:scale(1.15)}
+  40%{transform:scale(0.9)}
+  60%{transform:scale(1.05)}
+  80%{transform:scale(0.95)}
+  100%{transform:scale(1)}
+}
+.nav-btn:active,.submit-btn:active{animation:elasticBounce 0.6s ease}
+
+/* 11. Fade and Blur In */
+@keyframes fadeBlurIn{
+  from{opacity:0;filter:blur(10px) brightness(0.5)}
+  to{opacity:1;filter:blur(0) brightness(1)}
+}
+.hero-description{animation:fadeBlurIn 1s ease 0.6s backwards}
+
+/* 12. Diagonal Cascade */
+@keyframes diagonalSlide{
+  from{transform:translate(-50px,-50px) rotate(-5deg);opacity:0}
+  to{transform:translate(0,0) rotate(0);opacity:1}
+}
+.quick-link:nth-child(1){animation:diagonalSlide 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.1s backwards}
+.quick-link:nth-child(2){animation:diagonalSlide 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.2s backwards}
+.quick-link:nth-child(3){animation:diagonalSlide 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.3s backwards}
+.quick-link:nth-child(4){animation:diagonalSlide 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.4s backwards}
+.quick-link:nth-child(5){animation:diagonalSlide 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.5s backwards}
+
+/* 13. Skill Tag Pop Animation */
+@keyframes skillPop{
+  0%{transform:scale(0) rotate(-180deg);opacity:0}
+  70%{transform:scale(1.1) rotate(5deg)}
+  100%{transform:scale(1) rotate(0);opacity:1}
+}
+.skill-list li{animation:skillPop 0.5s cubic-bezier(0.34,1.56,0.64,1) backwards}
+.skill-list li:nth-child(1){animation-delay:0.1s}
+.skill-list li:nth-child(2){animation-delay:0.15s}
+.skill-list li:nth-child(3){animation-delay:0.2s}
+.skill-list li:nth-child(4){animation-delay:0.25s}
+.skill-list li:nth-child(5){animation-delay:0.3s}
+.skill-list li:nth-child(6){animation-delay:0.35s}
+
+/* 14. Ripple Click Effect */
+@keyframes ripple{
+  to{transform:scale(4);opacity:0}
+}
+.ripple-effect{position:relative;overflow:hidden}
+.ripple{position:absolute;border-radius:50%;background:rgba(0,255,225,0.5);transform:scale(0);animation:ripple 0.6s ease-out;pointer-events:none}
+
+/* 15. Typing Cursor */
+.typing-cursor::after{content:'|';animation:blink 1s step-end infinite;color:var(--neon);margin-left:2px}
+
+/* 16. Wave Float */
+@keyframes waveFloat{
+  0%,100%{transform:translateY(0px) translateX(0px)}
+  25%{transform:translateY(-5px) translateX(3px)}
+  50%{transform:translateY(0px) translateX(5px)}
+  75%{transform:translateY(5px) translateX(3px)}
+}
+.floating-element{animation:waveFloat 3s ease-in-out infinite}
+
+/* 17. Perspective Card Rotation */
+.project-card,.cert-card{transform-style:preserve-3d;transition:transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94)}
+.project-card:hover,.cert-card:hover{transform:rotateY(3deg) rotateX(-3deg) translateZ(20px)}
+
+/* 18. Rainbow Text Cycle */
+@keyframes rainbow{
+  0%{color:#00ffe1}
+  25%{color:#ff44cc}
+  50%{color:#00ffe1}
+  75%{color:#9aa0b2}
+  100%{color:#00ffe1}
+}
+.rainbow-text:hover{animation:rainbow 2s linear infinite}
+
+/* 19. Expand on Hover */
+@keyframes expand{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.05)}
+  100%{transform:scale(1)}
+}
+.social-btn:hover{animation:expand 0.4s ease}
+
+/* 20. Stagger Fade In for Lists */
+.stagger-fade{opacity:0;animation:fadeInUp 0.6s ease forwards}
+.stagger-fade:nth-child(1){animation-delay:0.05s}
+.stagger-fade:nth-child(2){animation-delay:0.1s}
+.stagger-fade:nth-child(3){animation-delay:0.15s}
+.stagger-fade:nth-child(4){animation-delay:0.2s}
+.stagger-fade:nth-child(5){animation-delay:0.25s}
+.stagger-fade:nth-child(6){animation-delay:0.3s}
+.stagger-fade:nth-child(7){animation-delay:0.35s}
+.stagger-fade:nth-child(8){animation-delay:0.4s}
+.stagger-fade:nth-child(9){animation-delay:0.45s}
+.stagger-fade:nth-child(10){animation-delay:0.5s}
+
 /* Responsive Design */
 @media(max-width:1024px){
   #overlay{max-width:90%;margin:0 auto;padding:16px}

@@ -406,3 +406,136 @@ function createClickSparkle(x, y) {
 window.addEventListener('beforeunload', () => {
   document.body.style.animation = 'pageSlideUp 0.3s ease-out reverse';
 });
+
+// ============================================
+// UNIQUE CREATIVE ANIMATIONS
+// ============================================
+
+// 1. Magnetic 3D Tilt Effect on Cards
+document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    if(window.innerWidth < 768) return; // Disable on mobile
+    
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateX = (y - centerY) / 10;
+    const rotateY = (centerX - x) / 10;
+    
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px) scale(1.02)`;
+  });
+  
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+  });
+});
+
+// 2. Ripple Click Effect
+document.querySelectorAll('.nav-btn, .cta-primary, .cta-secondary, .submit-btn').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    const ripple = document.createElement('span');
+    ripple.classList.add('ripple');
+    
+    const rect = this.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = e.clientX - rect.left - size / 2;
+    const y = e.clientY - rect.top - size / 2;
+    
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = x + 'px';
+    ripple.style.top = y + 'px';
+    
+    this.appendChild(ripple);
+    
+    setTimeout(() => ripple.remove(), 600);
+  });
+});
+
+// 3. Parallax Scroll Effect
+let ticking = false;
+window.addEventListener('scroll', () => {
+  if(!ticking && window.innerWidth >= 768) {
+    window.requestAnimationFrame(() => {
+      const scrolled = window.scrollY;
+      
+      // Parallax on hero section
+      const heroSection = document.querySelector('.hero-section');
+      if(heroSection) {
+        heroSection.style.transform = `translateY(${scrolled * 0.3}px)`;
+      }
+      
+      // Parallax on cards
+      document.querySelectorAll('.card').forEach((card, index) => {
+        const speed = 0.1 + (index * 0.05);
+        card.style.transform = `translateY(${scrolled * speed}px)`;
+      });
+      
+      ticking = false;
+    });
+    ticking = true;
+  }
+});
+
+// 4. Text Scramble Effect on Page Load
+function scrambleText(element, finalText) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+  let iteration = 0;
+  
+  const interval = setInterval(() => {
+    element.textContent = finalText.split('').map((char, index) => {
+      if(index < iteration) {
+        return finalText[index];
+      }
+      return characters[Math.floor(Math.random() * characters.length)];
+    }).join('');
+    
+    if(iteration >= finalText.length) {
+      clearInterval(interval);
+    }
+    iteration += 1 / 3;
+  }, 30);
+}
+
+// Apply scramble to hero title on load
+window.addEventListener('load', () => {
+  const heroTitle = document.querySelector('.hero-title');
+  if(heroTitle) {
+    const originalText = heroTitle.textContent;
+    setTimeout(() => scrambleText(heroTitle, originalText), 500);
+  }
+});
+
+// 5. Add shimmer text class to subtitles
+document.querySelectorAll('.hero-subtitle').forEach(subtitle => {
+  subtitle.classList.add('shimmer-text');
+});
+
+// 6. Typing Cursor Effect
+document.querySelectorAll('.hero-description').forEach(desc => {
+  desc.classList.add('typing-cursor');
+});
+
+// 7. Floating Animation for Social Icons
+document.querySelectorAll('.social-btn').forEach((btn, index) => {
+  btn.classList.add('floating-element');
+  btn.style.animationDelay = `${index * 0.2}s`;
+});
+
+// 8. Stagger Fade for Skill Lists
+document.querySelectorAll('.skill-list li').forEach(li => {
+  li.classList.add('stagger-fade');
+});
+
+// 9. Rainbow Text on Headings
+document.querySelectorAll('h2, h3').forEach(heading => {
+  heading.classList.add('rainbow-text');
+});
+
+// 10. Add Quick Link Class
+document.querySelectorAll('.link-card').forEach(card => {
+  card.classList.add('quick-link');
+});

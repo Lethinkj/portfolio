@@ -769,14 +769,16 @@ h2{animation:glowTextPulse 2s ease-in-out infinite}
   .hero-section{min-height:auto;padding:30px 15px;text-align:center !important}
   .hero-content{grid-template-columns:1fr !important;gap:25px !important;text-align:center !important}
   .hero-text{width:100% !important;text-align:center !important;margin:0 auto !important}
-  .hero-visual{width:100%;display:flex;justify-content:center;margin:0 auto}
-  .hero-title{font-size:28px !important;line-height:1.3 !important;text-align:center !important;margin:0 auto 16px !important}
-  .hero-subtitle{font-size:16px !important;text-align:center !important}
+  .hero-visual-desktop{display:none !important}
+  .hero-visual-inline{display:inline-flex !important;align-items:center;justify-content:center;margin-left:10px;vertical-align:middle}
+  .hero-title-wrapper{display:flex !important;align-items:center !important;justify-content:center !important;flex-wrap:nowrap !important;gap:0 !important}
+  .hero-title{font-size:28px !important;line-height:1.3 !important;text-align:center !important;margin:0 !important;display:inline-block !important}
+  .hero-subtitle{font-size:16px !important;text-align:center !important;margin:10px auto !important}
   .hero-description{font-size:14px !important;line-height:1.6 !important;text-align:center !important;max-width:100% !important;margin:0 auto 20px !important}
   .hero-cta{justify-content:center !important;flex-direction:row;flex-wrap:wrap;margin:0 auto}
   .cta-primary,.cta-secondary{text-align:center;padding:12px 20px;font-size:14px;margin:0 auto}
-  .profile-image-container{margin:0 auto;width:200px;height:200px}
-  .profile-image{width:180px;height:180px}
+  .hero-visual-inline .profile-image-container{width:100px;height:100px;margin:0;display:inline-flex;align-items:center;justify-content:center}
+  .hero-visual-inline .profile-image{width:85px;height:85px;border-width:2px}
   .nav-buttons{gap:10px;justify-content:center;flex-wrap:wrap;margin:0 auto}
   .nav-btn{padding:12px 16px;font-size:13px}
   .progress-indicator{display:none}

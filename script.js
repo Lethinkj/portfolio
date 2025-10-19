@@ -70,97 +70,107 @@ function draw(){
 }
 
 // Enhanced cursor follower with trails and effects
-const dot = document.createElement('div'); dot.className='cursor-dot';
-const ring = document.createElement('div'); ring.className='cursor-ring';
-document.body.appendChild(dot); document.body.appendChild(ring);
+// Disable on mobile devices
+const isMobile = window.matchMedia('(max-width: 768px)').matches || 'ontouchstart' in window;
 
-let mouse = {x: w/2, y: h/2};
-let pos = {x:mouse.x, y:mouse.y};
-let ringTarget = {x:mouse.x, y:mouse.y};
-let trailTimer = 0;
+if (!isMobile) {
+  const dot = document.createElement('div'); dot.className='cursor-dot';
+  const ring = document.createElement('div'); ring.className='cursor-ring';
+  document.body.appendChild(dot); document.body.appendChild(ring);
 
-window.addEventListener('mousemove',(e)=>{
-  mouse.x = e.clientX; mouse.y = e.clientY;
-  
-  // Create trail effect every few frames
-  trailTimer++;
-  if(trailTimer % 3 === 0) {
-    const trail = document.createElement('div');
-    trail.className = 'cursor-trail';
-    trail.style.left = e.clientX + 'px';
-    trail.style.top = e.clientY + 'px';
-    trail.style.transform = 'translate(-50%, -50%)';
-    document.body.appendChild(trail);
-    setTimeout(() => trail.remove(), 500);
+  let mouse = {x: 20, y: 20}; // Start from top corner instead of center
+  let pos = {x:mouse.x, y:mouse.y};
+  let ringTarget = {x:mouse.x, y:mouse.y};
+  let trailTimer = 0;
+
+  window.addEventListener('mousemove',(e)=>{
+    mouse.x = e.clientX; mouse.y = e.clientY;
+    
+    // Create trail effect every few frames
+    trailTimer++;
+    if(trailTimer % 3 === 0) {
+      const trail = document.createElement('div');
+      trail.className = 'cursor-trail';
+      trail.style.left = e.clientX + 'px';
+      trail.style.top = e.clientY + 'px';
+      trail.style.transform = 'translate(-50%, -50%)';
+      document.body.appendChild(trail);
+      setTimeout(() => trail.remove(), 500);
+    }
+  });
+
+  function ease(a,b,n){return (1-n)*a + n*b}
+
+  function loop(){
+    pos.x = ease(pos.x, mouse.x, 0.25);
+    pos.y = ease(pos.y, mouse.y, 0.25);
+    ringTarget.x = ease(ringTarget.x, mouse.x, 0.12);
+    ringTarget.y = ease(ringTarget.y, mouse.y, 0.12);
+
+    dot.style.left = pos.x + 'px';
+    dot.style.top = pos.y + 'px';
+    ring.style.left = ringTarget.x + 'px';
+    ring.style.top = ringTarget.y + 'px';
+
+    requestAnimationFrame(loop);
   }
-});
 
-function ease(a,b,n){return (1-n)*a + n*b}
+  // Enhanced click effects
+  window.addEventListener('mousedown', ()=>{
+    dot.style.width = '20px';
+    dot.style.height = '20px';
+    ring.style.width = '30px';
+    ring.style.height = '30px';
+    
+    // Create ripple effect
+    const ripple = document.createElement('div');
+    ripple.style.cssText = `position:fixed;left:${mouse.x}px;top:${mouse.y}px;width:10px;height:10px;border-radius:50%;border:2px solid var(--neon);pointer-events:none;z-index:9996;transform:translate(-50%,-50%);animation:clickRipple 0.6s ease-out forwards`;
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+  });
 
-function loop(){
-  pos.x = ease(pos.x, mouse.x, 0.25);
-  pos.y = ease(pos.y, mouse.y, 0.25);
-  ringTarget.x = ease(ringTarget.x, mouse.x, 0.12);
-  ringTarget.y = ease(ringTarget.y, mouse.y, 0.12);
-
-  dot.style.left = pos.x + 'px';
-  dot.style.top = pos.y + 'px';
-  ring.style.left = ringTarget.x + 'px';
-  ring.style.top = ringTarget.y + 'px';
-
-  requestAnimationFrame(loop);
-}
-
-// Enhanced click effects
-window.addEventListener('mousedown', ()=>{
-  dot.style.width = '20px';
-  dot.style.height = '20px';
-  ring.style.width = '30px';
-  ring.style.height = '30px';
-  
-  // Create ripple effect
-  const ripple = document.createElement('div');
-  ripple.style.cssText = `position:fixed;left:${mouse.x}px;top:${mouse.y}px;width:10px;height:10px;border-radius:50%;border:2px solid var(--neon);pointer-events:none;z-index:9996;transform:translate(-50%,-50%);animation:clickRipple 0.6s ease-out forwards`;
-  document.body.appendChild(ripple);
-  setTimeout(() => ripple.remove(), 600);
-});
-
-window.addEventListener('mouseup', ()=>{
-  dot.style.width = '12px';
-  dot.style.height = '12px';
-  ring.style.width = '40px';
-  ring.style.height = '40px';
-});
-
-// Hover effects on interactive elements
-const interactiveElements = 'a, button, .nav-link, .cta-primary, .cta-secondary, .link-card, .project-card, .cert-card, .skill-category, input, textarea';
-document.addEventListener('mouseover', (e) => {
-  if(e.target.matches(interactiveElements)) {
-    dot.style.width = '25px';
-    dot.style.height = '25px';
-    ring.style.width = '60px';
-    ring.style.height = '60px';
-    ring.style.borderColor = 'var(--accent)';
-  }
-});
-
-document.addEventListener('mouseout', (e) => {
-  if(e.target.matches(interactiveElements)) {
+  window.addEventListener('mouseup', ()=>{
     dot.style.width = '12px';
     dot.style.height = '12px';
     ring.style.width = '40px';
     ring.style.height = '40px';
-    ring.style.borderColor = 'var(--neon)';
-  }
-});
+  });
 
-// reduced-motion respect
-if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-  // remove heavy animations
-  document.querySelectorAll('.cursor-dot, .cursor-ring').forEach(n=>n.remove());
-  particles.length = 0;
-} else {
-  draw(); loop();
+  // Hover effects on interactive elements
+  const interactiveElements = 'a, button, .nav-link, .cta-primary, .cta-secondary, .link-card, .project-card, .cert-card, .skill-category, input, textarea';
+  document.addEventListener('mouseover', (e) => {
+    if(e.target.matches(interactiveElements)) {
+      dot.style.width = '25px';
+      dot.style.height = '25px';
+      ring.style.width = '60px';
+      ring.style.height = '60px';
+      ring.style.borderColor = 'var(--accent)';
+    }
+  });
+
+  document.addEventListener('mouseout', (e) => {
+    if(e.target.matches(interactiveElements)) {
+      dot.style.width = '12px';
+      dot.style.height = '12px';
+      ring.style.width = '40px';
+      ring.style.height = '40px';
+      ring.style.borderColor = 'var(--neon)';
+    }
+  });
+
+  // reduced-motion respect
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    // remove heavy animations
+    document.querySelectorAll('.cursor-dot, .cursor-ring').forEach(n=>n.remove());
+    particles.length = 0;
+  } else {
+    loop();
+  }
+} // End of !isMobile check
+
+// Start canvas animations if not on mobile and motion is allowed
+if (!isMobile && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  draw();
 }
 
 // set year

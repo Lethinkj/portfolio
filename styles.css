@@ -783,15 +783,16 @@ h2{animation:glowTextPulse 2s ease-in-out infinite}
   .nav-btn{padding:12px 16px;font-size:13px}
   .progress-indicator{display:none}
   .skills-grid{grid-template-columns:1fr;gap:12px}
-  .skill-category{text-align:center !important;margin:0 auto}
+  .skill-category{text-align:center !important;margin:0 auto;min-height:220px;display:flex;flex-direction:column}
   .skill-category h3{text-align:center !important}
+  .skill-list{flex:1}
   .projects-grid{grid-template-columns:1fr}
-  .project-card{text-align:center !important;margin:0 auto}
+  .project-card{text-align:center !important;margin:0 auto;min-height:300px;display:flex;flex-direction:column;justify-content:space-between}
   .project-card h3{text-align:center !important}
-  .project-desc{text-align:center !important}
+  .project-desc{text-align:center !important;flex:1}
   .certifications-grid{grid-template-columns:1fr;gap:12px}
-  .cert-card{text-align:center !important;margin:0 auto}
-  .cert-card h3{text-align:center !important}
+  .cert-card{text-align:center !important;margin:0 auto;min-height:200px;display:flex;flex-direction:column;justify-content:space-between}
+  .cert-card h3{text-align:center !important;flex:1;display:flex;align-items:center;justify-content:center}
   .social-icons{gap:10px;flex-wrap:wrap;justify-content:center}
   .social-btn{padding:10px 14px;font-size:13px}
   .social-links-full{grid-template-columns:1fr;gap:12px}
@@ -803,7 +804,7 @@ h2{animation:glowTextPulse 2s ease-in-out infinite}
   h2{text-align:center !important}
   p{text-align:center !important}
   .link-grid{grid-template-columns:1fr;gap:12px;text-align:center}
-  .link-card{text-align:center !important;margin:0 auto}
+  .link-card{text-align:center !important;margin:0 auto;min-height:150px;display:flex;flex-direction:column;justify-content:center}
   .link-card h3{text-align:center !important}
   .link-card p{text-align:center !important}
   .intro{text-align:center !important;margin:0 auto}
@@ -843,22 +844,22 @@ h2{animation:glowTextPulse 2s ease-in-out infinite}
   .nav-buttons{gap:8px;flex-direction:column;align-items:center;width:100%;margin:0 auto}
   .nav-btn{width:90%;max-width:280px;padding:10px;font-size:12px;text-align:center;margin:0 auto}
   .skills-grid{grid-template-columns:1fr;gap:10px}
-  .skill-category{padding:12px;text-align:center !important;margin:0 auto}
+  .skill-category{padding:12px;text-align:center !important;margin:0 auto;min-height:200px;display:flex;flex-direction:column}
   .skill-category h3{font-size:13px;margin-bottom:8px;text-align:center !important}
-  .skill-list{gap:6px;justify-content:center;flex-wrap:wrap}
+  .skill-list{gap:6px;justify-content:center;flex-wrap:wrap;flex:1}
   .skill-list li{font-size:11px;padding:6px 10px}
   .projects-grid{grid-template-columns:1fr;gap:10px}
-  .project-card{padding:12px;text-align:center !important;margin:0 auto}
+  .project-card{padding:12px;text-align:center !important;margin:0 auto;min-height:280px;display:flex;flex-direction:column;justify-content:space-between}
   .project-card h3{font-size:15px;margin-bottom:8px;text-align:center !important}
-  .project-desc{font-size:11px;line-height:1.5;text-align:center !important}
+  .project-desc{font-size:11px;line-height:1.5;text-align:center !important;flex:1}
   .project-meta{font-size:10px;text-align:center !important}
   .project-tech{justify-content:center !important}
   .certifications-grid{grid-template-columns:1fr;gap:10px}
-  .cert-card{padding:12px;text-align:center !important;margin:0 auto}
-  .cert-card h3{font-size:13px;text-align:center !important}
+  .cert-card{padding:12px;text-align:center !important;margin:0 auto;min-height:180px;display:flex;flex-direction:column;justify-content:space-between}
+  .cert-card h3{font-size:13px;text-align:center !important;flex:1;display:flex;align-items:center;justify-content:center}
   .cert-icon{font-size:20px;margin-bottom:8px}
   .cert-issuer{text-align:center !important}
-  .cert-link{text-align:center !important}
+  .cert-link{text-align:center !important;margin-top:auto}
   .social-links-full{grid-template-columns:1fr;gap:10px}
   .social-item{padding:12px;font-size:12px;text-align:center !important;margin:0 auto}
   .social-item h4{text-align:center !important}
@@ -871,7 +872,7 @@ h2{animation:glowTextPulse 2s ease-in-out infinite}
   h3{text-align:center !important}
   p{text-align:center !important}
   .link-grid{grid-template-columns:1fr;gap:10px;text-align:center}
-  .link-card{text-align:center !important;margin:0 auto}
+  .link-card{text-align:center !important;margin:0 auto;min-height:140px;display:flex;flex-direction:column;justify-content:center}
   .link-card h3{text-align:center !important}
   .link-card p{text-align:center !important}
   .intro{text-align:center !important;margin:0 auto}

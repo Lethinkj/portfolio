@@ -972,6 +972,22 @@ window.addEventListener('load', () => {
       heroTitle.appendChild(spanWrapper);
     }
   });
+
+  // 21. Social CTA text adjustments for touch vs non-touch
+  (function(){
+    const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+    const ctaText = isTouch ? 'Tap to connect' : 'Click to explore';
+
+    document.querySelectorAll('.social-btn-large').forEach(btn => {
+      const cta = btn.querySelector('.social-cta');
+      const label = btn.querySelector('.social-label');
+      if(cta) cta.textContent = ctaText;
+      if(label && !btn.getAttribute('aria-label')) {
+        btn.setAttribute('aria-label', label.textContent.trim());
+      }
+      // keep hrefs intact; clicking will still navigate
+    });
+  })();
   
   // Show subtitle and description after title animation
   setTimeout(() => {

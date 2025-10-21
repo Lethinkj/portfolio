@@ -783,7 +783,7 @@ h2{animation:glowTextPulse 2s ease-in-out infinite}
   .nav-btn{padding:12px 16px;font-size:13px}
   .progress-indicator{display:none}
   .skills-grid{grid-template-columns:1fr;gap:12px;grid-auto-rows:1fr;justify-items:center;width:100%}
-  .skill-category{text-align:center !important;margin:0 auto;min-height:220px;display:flex;flex-direction:column;width:100%;max-width:500px}
+  .skill-category{text-align:center !important;margin:0 auto;min-height:160px;display:flex;flex-direction:column;width:100%;max-width:500px}
   .skill-category h3{text-align:center !important}
   .skill-list{flex:1}
   .projects-grid{grid-template-columns:1fr;grid-auto-rows:1fr;justify-items:center;width:100%}
@@ -803,7 +803,7 @@ h2{animation:glowTextPulse 2s ease-in-out infinite}
   .submit-btn{width:100%;padding:14px}
   h2{text-align:center !important}
   p{text-align:center !important}
-  .link-grid{grid-template-columns:1fr;gap:12px;text-align:center;grid-auto-rows:1fr;justify-items:center;width:100%}
+  .link-grid{grid-template-columns:1fr;gap:12px;text-align:center;grid-auto-rows:1fr;justify-items:center;width:100%;display:none}
   .link-card{text-align:center !important;margin:0 auto;min-height:150px;display:flex;flex-direction:column;justify-content:center;width:100%;max-width:500px}
   .link-card h3{text-align:center !important}
   .link-card p{text-align:center !important}
@@ -844,7 +844,7 @@ h2{animation:glowTextPulse 2s ease-in-out infinite}
   .nav-buttons{gap:8px;flex-direction:column;align-items:center;width:100%;margin:0 auto}
   .nav-btn{width:90%;max-width:280px;padding:10px;font-size:12px;text-align:center;margin:0 auto}
   .skills-grid{grid-template-columns:1fr;gap:10px;grid-auto-rows:1fr;justify-items:center;width:100%}
-  .skill-category{padding:12px;text-align:center !important;margin:0 auto;min-height:200px;display:flex;flex-direction:column;width:100%;max-width:500px}
+  .skill-category{padding:12px;text-align:center !important;margin:0 auto;min-height:140px;display:flex;flex-direction:column;width:100%;max-width:500px}
   .skill-category h3{font-size:13px;margin-bottom:8px;text-align:center !important}
   .skill-list{gap:6px;justify-content:center;flex-wrap:wrap;flex:1}
   .skill-list li{font-size:11px;padding:6px 10px}
@@ -871,7 +871,7 @@ h2{animation:glowTextPulse 2s ease-in-out infinite}
   h2{text-align:center !important;font-size:18px}
   h3{text-align:center !important}
   p{text-align:center !important}
-  .link-grid{grid-template-columns:1fr;gap:10px;text-align:center;grid-auto-rows:1fr;justify-items:center;width:100%}
+  .link-grid{grid-template-columns:1fr;gap:10px;text-align:center;grid-auto-rows:1fr;justify-items:center;width:100%;display:none}
   .link-card{text-align:center !important;margin:0 auto;min-height:140px;display:flex;flex-direction:column;justify-content:center;width:100%;max-width:500px}
   .link-card h3{text-align:center !important}
   .link-card p{text-align:center !important}

@@ -119,8 +119,8 @@ if (!isMobile) {
     mouse.x = e.clientX; mouse.y = e.clientY;
     if(firstMove){
       firstMove = false;
-      if(dot){ dot.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`; dot.style.opacity = '1'; }
-      if(ring){ ring.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`; ring.style.opacity = '1'; }
+      if(dot){ dot.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`; dot.style.opacity = '1'; dot.style.visibility = 'visible'; }
+      if(ring){ ring.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`; ring.style.opacity = '1'; ring.style.visibility = 'visible'; }
     } else {
       if(dot) dot.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`;
     }

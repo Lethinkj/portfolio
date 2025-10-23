@@ -324,12 +324,7 @@ canvas#bg{position:fixed;inset:0;z-index:0}
 @keyframes orbDrift3{0%{transform:translateY(0) translateX(0)}50%{transform:translateY(-10px) translateX(6px)}100%{transform:translateY(0) translateX(0)}}
 
 /* Distinct My Journey heading animation */
-.my-journey{display:inline-block;color:var(--neon);margin-top:18px;margin-bottom:10px;animation:journeyEntrance 1s cubic-bezier(0.2,0.9,0.2,1) forwards}
-@keyframes journeyEntrance{
-  0%{opacity:0;transform:translateY(12px) skewY(-3deg);filter:blur(4px)}
-  60%{opacity:1;transform:translateY(-6px) skewY(2deg);filter:blur(0px)}
-  100%{opacity:1;transform:translateY(0) skewY(0)}
-}
+.my-journey{display:inline-block;color:var(--neon);margin-top:18px;margin-bottom:10px;text-shadow:0 0 18px rgba(0,255,225,0.55);animation:none;font-weight:700}
 
 /* PC vs Mobile animation optimization */
 @media (max-width: 768px) {
@@ -338,7 +333,11 @@ canvas#bg{position:fixed;inset:0;z-index:0}
   .ambient-orb{filter:blur(18px);opacity:0.55}
   .ambient-orb.orb-1, .ambient-orb.orb-2, .ambient-orb.orb-3{animation-duration:16s}
   /* shorten heading animations */
-  .my-journey{animation-duration:0.6s}
+  .my-journey{animation:none}
+  /* Group social items into a single box on mobile */
+  .social-links-full{display:block}
+  .social-links-full .social-item{margin:12px auto;max-width:420px}
+  .social-links-full .social-item .social-btn-large{width:80%;margin:12px auto;display:block}
   /* simplify particles and shimmer effects already in JS/CSS */
   .project-card::before,.cert-card::before,.link-card::before{opacity:0 !important}
   .card{box-shadow:0 4px 12px rgba(0,0,0,0.6)}
@@ -395,6 +394,9 @@ canvas#bg{position:fixed;inset:0;z-index:0}
   /* remove transform animation so JS can fully control position via inline styles */
   animation: cursorGlow 1.8s ease-in-out infinite;
   transform:translate3d(0,0,0);
+  /* start hidden until JS positions it to avoid flashing at 0,0 */
+  visibility: hidden;
+  opacity: 0;
 }
 
 .cursor-ring{
@@ -411,6 +413,9 @@ canvas#bg{position:fixed;inset:0;z-index:0}
   opacity:1;
   /* keep a subtle breathing scale but avoid transform that conflicts with translate(-50%,-50%) */
   animation:cursorBreath 3s ease-in-out infinite;
+  /* hide until JS reveals */
+  visibility: hidden;
+  opacity: 0;
 }
 
 .cursor-trail{

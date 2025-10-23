@@ -113,9 +113,28 @@ if (!isMobile) {
     }
   });
 
+  // Also handle pointermove to cover more input devices (touchpad, pen, etc.) and ensure firstMove triggers
+  window.addEventListener('pointermove', (e) => {
+    // Mirror mousemove behavior
+    mouse.x = e.clientX; mouse.y = e.clientY;
+    if(firstMove){
+      firstMove = false;
+      if(dot){ dot.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`; dot.style.opacity = '1'; }
+      if(ring){ ring.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`; ring.style.opacity = '1'; }
+    } else {
+      if(dot) dot.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`;
+    }
+  }, {passive:true});
+
   function ease(a,b,n){return (1-n)*a + n*b}
 
   function loop(){
+    // wait until we have initial mouse coordinates
+    if(mouse.x === null || mouse.y === null){
+      requestAnimationFrame(loop);
+      return;
+    }
+
     // Ring should lag slightly for a trailing effect; dot is positioned directly on mousemove for immediate response
     ringTarget.x = ease(ringTarget.x, mouse.x, 0.16);
     ringTarget.y = ease(ringTarget.y, mouse.y, 0.16);

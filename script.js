@@ -301,9 +301,31 @@ if (!isMobile && !window.matchMedia('(prefers-reduced-motion: reduce)').matches)
     const orb3 = document.createElement('div'); orb3.className='ambient-orb orb-3'; orb3.style.left='50%'; orb3.style.bottom='6%'; ab.appendChild(orb3);
   }
 
-  // Add dynamic radial container if not present
-  if(!document.querySelector('.dynamic-radial')){
-    const dyn = document.createElement('div'); dyn.className='dynamic-radial'; document.body.appendChild(dyn);
+  // Add dynamic radial container if not present, but skip on contact page
+  const path = window.location.pathname.toLowerCase();
+  if(!path.includes('contact')){
+    if(!document.querySelector('.dynamic-radial')){
+      const dyn = document.createElement('div'); dyn.className='dynamic-radial'; document.body.appendChild(dyn);
+    }
+
+    // Show radial only while pointer is actively moving; hide shortly after idle
+    const dynEl = document.querySelector('.dynamic-radial');
+    let dynHideTimer = null;
+    function showDynamic(){
+      if(!dynEl) return;
+      dynEl.classList.add('visible');
+      if(dynHideTimer) { clearTimeout(dynHideTimer); dynHideTimer = null; }
+      dynHideTimer = setTimeout(()=>{
+        dynEl.classList.remove('visible');
+      }, 700); // hide 700ms after last movement
+    }
+
+    window.addEventListener('pointermove', (e)=>{
+      showDynamic();
+    }, {passive:true});
+    window.addEventListener('mousemove', (e)=>{
+      showDynamic();
+    }, {passive:true});
   }
 })();
 

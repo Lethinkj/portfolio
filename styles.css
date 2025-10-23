@@ -328,7 +328,8 @@ canvas#bg{position:fixed;inset:0;z-index:0}
 .dynamic-radial.visible{opacity:0.85}
 
 @media (max-width:768px){
-  .dynamic-radial{display:none !important}
+  /* allow dynamic radial on mobile but reduce intensity */
+  .dynamic-radial{opacity:0.32}
 }
 
 @media (prefers-reduced-motion: reduce){

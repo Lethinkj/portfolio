@@ -301,32 +301,54 @@ if (!isMobile && !window.matchMedia('(prefers-reduced-motion: reduce)').matches)
     const orb3 = document.createElement('div'); orb3.className='ambient-orb orb-3'; orb3.style.left='50%'; orb3.style.bottom='6%'; ab.appendChild(orb3);
   }
 
-  // Add dynamic radial container if not present, but skip on contact page
-  const path = window.location.pathname.toLowerCase();
-  if(!path.includes('contact')){
-    if(!document.querySelector('.dynamic-radial')){
-      const dyn = document.createElement('div'); dyn.className='dynamic-radial'; document.body.appendChild(dyn);
-    }
-
-    // Show radial only while pointer is actively moving; hide shortly after idle
-    const dynEl = document.querySelector('.dynamic-radial');
-    let dynHideTimer = null;
-    function showDynamic(){
-      if(!dynEl) return;
-      dynEl.classList.add('visible');
-      if(dynHideTimer) { clearTimeout(dynHideTimer); dynHideTimer = null; }
-      dynHideTimer = setTimeout(()=>{
-        dynEl.classList.remove('visible');
-      }, 700); // hide 700ms after last movement
-    }
-
-    window.addEventListener('pointermove', (e)=>{
-      showDynamic();
-    }, {passive:true});
-    window.addEventListener('mousemove', (e)=>{
-      showDynamic();
-    }, {passive:true});
+  // Add dynamic radial container if not present (enable on all pages, including contact)
+  if(!document.querySelector('.dynamic-radial')){
+    const dyn = document.createElement('div'); dyn.className='dynamic-radial'; document.body.appendChild(dyn);
   }
+
+  // Show radial only while pointer/touch is actively moving; hide shortly after idle
+  const dynEl = document.querySelector('.dynamic-radial');
+  let dynHideTimer = null;
+  function showDynamic(){
+    if(!dynEl) return;
+    dynEl.classList.add('visible');
+    if(dynHideTimer) { clearTimeout(dynHideTimer); dynHideTimer = null; }
+    dynHideTimer = setTimeout(()=>{
+      dynEl.classList.remove('visible');
+    }, 700); // hide 700ms after last movement
+  }
+
+  // pointer/mouse
+  window.addEventListener('pointermove', (e)=>{ showDynamic(); }, {passive:true});
+  window.addEventListener('mousemove', (e)=>{ showDynamic(); }, {passive:true});
+
+  // touch: map touch positions to CSS vars and show radial while swiping
+  let lastTouch = 0;
+  window.addEventListener('touchmove', (e)=>{
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const now = Date.now(); if(now - lastTouch < 16) return; lastTouch = now;
+    const t = e.touches[0]; if(!t) return;
+    // set vars directly from touch position
+    const px = Math.round((t.clientX / window.innerWidth) * 10000) / 100 + '%';
+    const py = Math.round((t.clientY / window.innerHeight) * 10000) / 100 + '%';
+    document.documentElement.style.setProperty('--cursor-x', px);
+    document.documentElement.style.setProperty('--cursor-y', py);
+    showDynamic();
+  }, {passive:true});
+
+  // scroll/viewport-based trigger: compute visible center and animate radial towards it
+  let lastScroll = 0;
+  window.addEventListener('scroll', ()=>{
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const now = Date.now(); if(now - lastScroll < 80) return; lastScroll = now;
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    const px = Math.round((cx / window.innerWidth) * 10000) / 100 + '%';
+    const py = Math.round((cy / window.innerHeight) * 10000) / 100 + '%';
+    document.documentElement.style.setProperty('--cursor-x', px);
+    document.documentElement.style.setProperty('--cursor-y', py);
+    showDynamic();
+  }, {passive:true});
 })();
 
 // set year

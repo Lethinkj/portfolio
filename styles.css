@@ -305,6 +305,52 @@ canvas#bg{position:fixed;inset:0;z-index:0}
 .sparkle-effect{position:relative}
 .sparkle-effect::after{content:'✨';position:absolute;right:-15px;top:-15px;font-size:20px;animation:glitter 2s ease-out infinite}
 
+/* Background ambient layers - subtle radial gradient + drifting orbs */
+.ambient-backdrop{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.ambient-radial{position:absolute;inset:0;background:radial-gradient(circle at 20% 20%, rgba(0,255,225,0.06) 0%, transparent 25%), radial-gradient(circle at 80% 80%, rgba(255,68,204,0.04) 0%, transparent 30%);mix-blend-mode:screen;opacity:0.9;animation:ambientShift 18s linear infinite}
+.ambient-orb{position:absolute;border-radius:50%;filter:blur(28px);opacity:0.75;mix-blend-mode:screen}
+.ambient-orb.orb-1{width:220px;height:220px;background:radial-gradient(circle, rgba(0,255,225,0.22), rgba(0,255,225,0.02));left:5%;top:10%;animation:orbDrift1 28s ease-in-out infinite}
+.ambient-orb.orb-2{width:160px;height:160px;background:radial-gradient(circle, rgba(255,68,204,0.18), rgba(255,68,204,0.01));right:8%;top:30%;animation:orbDrift2 24s ease-in-out infinite}
+.ambient-orb.orb-3{width:100px;height:100px;background:radial-gradient(circle, rgba(255,255,255,0.12), rgba(255,255,255,0.01));left:50%;bottom:8%;animation:orbDrift3 32s ease-in-out infinite}
+
+@keyframes ambientShift{
+  0%{transform:translate3d(0,0,0) scale(1)}
+  50%{transform:translate3d(-2%,1%,0) scale(1.03)}
+  100%{transform:translate3d(0,0,0) scale(1)}
+}
+
+@keyframes orbDrift1{0%{transform:translateY(0) translateX(0)}50%{transform:translateY(-18px) translateX(10px)}100%{transform:translateY(0) translateX(0)}}
+@keyframes orbDrift2{0%{transform:translateY(0) translateX(0)}50%{transform:translateY(12px) translateX(-8px)}100%{transform:translateY(0) translateX(0)}}
+@keyframes orbDrift3{0%{transform:translateY(0) translateX(0)}50%{transform:translateY(-10px) translateX(6px)}100%{transform:translateY(0) translateX(0)}}
+
+/* Distinct My Journey heading animation */
+.my-journey{display:inline-block;color:var(--neon);margin-top:18px;margin-bottom:10px;animation:journeyEntrance 1s cubic-bezier(0.2,0.9,0.2,1) forwards}
+@keyframes journeyEntrance{
+  0%{opacity:0;transform:translateY(12px) skewY(-3deg);filter:blur(4px)}
+  60%{opacity:1;transform:translateY(-6px) skewY(2deg);filter:blur(0px)}
+  100%{opacity:1;transform:translateY(0) skewY(0)}
+}
+
+/* PC vs Mobile animation optimization */
+@media (max-width: 768px) {
+  /* reduce or disable heavy background animations for performance on mobile */
+  .ambient-backdrop{opacity:0.35}
+  .ambient-orb{filter:blur(18px);opacity:0.55}
+  .ambient-orb.orb-1, .ambient-orb.orb-2, .ambient-orb.orb-3{animation-duration:16s}
+  /* shorten heading animations */
+  .my-journey{animation-duration:0.6s}
+  /* simplify particles and shimmer effects already in JS/CSS */
+  .project-card::before,.cert-card::before,.link-card::before{opacity:0 !important}
+  .card{box-shadow:0 4px 12px rgba(0,0,0,0.6)}
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce){
+  .ambient-backdrop, .ambient-orb, .sparkle-effect::after, .cursor-trail { animation: none !important; transition: none !important; }
+  .my-journey{animation:none}
+  .card, .project-card, .cert-card{transition:none}
+}
+
 .page-section{animation:pageSlideUp 0.6s cubic-bezier(0.25,0.46,0.45,0.94) forwards;opacity:0}
 .page-section:nth-child(n+2){animation-delay:0.2s}
 .page-section:nth-child(n+3){animation-delay:0.4s}

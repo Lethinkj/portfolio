@@ -354,6 +354,26 @@ if (!isMobile && !window.matchMedia('(prefers-reduced-motion: reduce)').matches)
 // set year
 document.getElementById('year').textContent = new Date().getFullYear();
 
+// Fix/normalize BashXCode external link(s) if protocol is missing (defensive)
+(function(){
+  const nodes = Array.from(document.querySelectorAll('a[href*="bashxcode.vercel.app"]'));
+  nodes.forEach(a => {
+    let href = a.getAttribute('href') || '';
+    // if href does not start with http(s), prefix https://
+    if(href && !href.match(/^https?:\/\//i)){
+      // strip leading slashes
+      href = href.replace(/^\/+/, '');
+      a.setAttribute('href', 'https://' + href);
+    }
+    // ensure opens in new tab and safe rel
+    a.setAttribute('target', '_blank');
+    let rel = a.getAttribute('rel') || '';
+    if(!/noopener/i.test(rel)) rel = (rel + ' noopener').trim();
+    if(!/noreferrer/i.test(rel)) rel = (rel + ' noreferrer').trim();
+    a.setAttribute('rel', rel);
+  });
+})();
+
 // Progress Indicator Navigation
 function updateProgressIndicator(){
   const sections = document.querySelectorAll('section[id]');

@@ -165,6 +165,9 @@ canvas#bg{position:fixed;inset:0;z-index:0}
 .project-links{margin-bottom:12px}
 .project-link{display:inline-block;color:var(--neon);text-decoration:none;font-weight:600;padding:6px 12px;border:1px solid rgba(0,255,225,0.2);border-radius:4px;transition:all 0.3s ease}
 .project-link:hover{background:rgba(0,255,225,0.1);box-shadow:0 0 12px rgba(0,255,225,0.3)}
+
+/* Ensure project links sit above decorative elements and are clickable */
+.project-links, .project-link{position:relative;z-index:6}
 .project-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
 .tag{display:inline-block;background:rgba(255,68,204,0.15);color:var(--accent);padding:4px 8px;border-radius:4px;font-size:11px;border:1px solid rgba(255,68,204,0.3)}
 

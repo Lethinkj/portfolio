@@ -374,6 +374,19 @@ document.getElementById('year').textContent = new Date().getFullYear();
   });
 })();
 
+// Fallback: if a project-link is not clickable due to stacking/context, add JS handler to open it
+document.querySelectorAll('.project-link').forEach(el => {
+  el.addEventListener('click', (e) => {
+    // if it's an external http(s) link, ensure it opens
+    const href = el.getAttribute('href') || '';
+    if(href && href.match(/^https?:\/\//i)){
+      // allow default behavior but defensively open in a new tab
+      window.open(href, '_blank', 'noopener,noreferrer');
+      e.preventDefault();
+    }
+  });
+});
+
 // Progress Indicator Navigation
 function updateProgressIndicator(){
   const sections = document.querySelectorAll('section[id]');

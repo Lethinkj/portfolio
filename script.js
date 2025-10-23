@@ -74,35 +74,48 @@ function draw(){
 const isMobile = window.matchMedia('(max-width: 768px)').matches || 'ontouchstart' in window;
 
 if (!isMobile) {
-  const dot = document.createElement('div'); dot.className='cursor-dot';
-  const ring = document.createElement('div'); ring.className='cursor-ring';
-  // start hidden until first pointer movement to avoid top-left origin
-  dot.style.opacity = '0';
-  ring.style.opacity = '0';
-  document.body.appendChild(dot); document.body.appendChild(ring);
-
-  let mouse = {x: null, y: null}; // will be set on first pointermove
-  let pos = {x:mouse.x, y:mouse.y};
-  let ringTarget = {x:mouse.x, y:mouse.y};
+  // lazy-create DOM nodes for the cursor to avoid any initial 0,0 paint
+  let dot = null;
+  let ring = null;
+  let mouse = { x: null, y: null };
+  let ringTarget = { x: null, y: null };
   let trailTimer = 0;
   let firstMove = true;
 
-  window.addEventListener('mousemove',(e)=>{
-    mouse.x = e.clientX; mouse.y = e.clientY;
+  function createCursorElements(x = window.innerWidth/2, y = window.innerHeight/2){
+    if(dot && ring) return;
+    dot = document.createElement('div'); dot.className = 'cursor-dot';
+    ring = document.createElement('div'); ring.className = 'cursor-ring';
+    // start hidden then place at given pos
+    dot.style.opacity = '0'; dot.style.visibility = 'hidden';
+    ring.style.opacity = '0'; ring.style.visibility = 'hidden';
+    document.body.appendChild(dot); document.body.appendChild(ring);
 
-    // On the first move, reveal & position the dot and ring exactly at the pointer
+    // immediate placement
+    dot.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+    ring.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+    // reveal
+    requestAnimationFrame(()=>{
+      dot.style.visibility = 'visible'; dot.style.opacity = '1';
+      ring.style.visibility = 'visible'; ring.style.opacity = '1';
+    });
+    ringTarget.x = x; ringTarget.y = y;
+  }
+
+  // unify pointermove/mousemove so all devices trigger creation promptly
+  function handlePointerMove(e){
+    mouse.x = e.clientX; mouse.y = e.clientY;
     if(firstMove){
       firstMove = false;
-      if(dot){ dot.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`; dot.style.opacity = '1'; }
-      if(ring){ ring.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`; ring.style.opacity = '1'; }
-    } else {
-      // Move the small dot immediately for native-like responsiveness
-      if(dot) dot.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`;
+      createCursorElements(mouse.x, mouse.y);
+    } else if(dot){
+      // dot follows instantly for native-like feel
+      dot.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`;
     }
 
-    // Create trail effect every few frames
+    // trail
     trailTimer++;
-    if(trailTimer % 3 === 0) {
+    if(trailTimer % 3 === 0){
       const trail = document.createElement('div');
       trail.className = 'cursor-trail';
       trail.style.left = e.clientX + 'px';
@@ -111,20 +124,10 @@ if (!isMobile) {
       document.body.appendChild(trail);
       setTimeout(() => trail.remove(), 500);
     }
-  });
+  }
 
-  // Also handle pointermove to cover more input devices (touchpad, pen, etc.) and ensure firstMove triggers
-  window.addEventListener('pointermove', (e) => {
-    // Mirror mousemove behavior
-    mouse.x = e.clientX; mouse.y = e.clientY;
-    if(firstMove){
-      firstMove = false;
-      if(dot){ dot.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`; dot.style.opacity = '1'; dot.style.visibility = 'visible'; }
-      if(ring){ ring.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`; ring.style.opacity = '1'; ring.style.visibility = 'visible'; }
-    } else {
-      if(dot) dot.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`;
-    }
-  }, {passive:true});
+  window.addEventListener('pointermove', handlePointerMove, {passive:true});
+  window.addEventListener('mousemove', handlePointerMove, {passive:true});
 
   // Restore last cursor position from sessionStorage (so cursor appears at same place across navigation)
   try{
@@ -132,41 +135,34 @@ if (!isMobile) {
     if(last){
       const {x,y} = JSON.parse(last);
       if(typeof x === 'number' && typeof y === 'number'){
-        mouse.x = x; mouse.y = y; ringTarget.x = x; ringTarget.y = y; firstMove = false;
-        dot.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
-        ring.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
-        dot.style.opacity = '1'; ring.style.opacity = '1'; dot.style.visibility='visible'; ring.style.visibility='visible';
+        mouse.x = x; mouse.y = y; firstMove = false;
+        createCursorElements(x,y);
       }
     }
   }catch(e){/* ignore storage errors */}
 
-  function ease(a,b,n){return (1-n)*a + n*b}
+  function ease(a,b,n){ return (1-n)*a + n*b }
 
   function loop(){
-    // wait until we have initial mouse coordinates
     if(mouse.x === null || mouse.y === null){
-      requestAnimationFrame(loop);
-      return;
+      requestAnimationFrame(loop); return;
     }
+    if(!ring) { requestAnimationFrame(loop); return; }
 
-    // Ring should lag slightly for a trailing effect; dot is positioned directly on mousemove for immediate response
-    ringTarget.x = ease(ringTarget.x, mouse.x, 0.16);
-    ringTarget.y = ease(ringTarget.y, mouse.y, 0.16);
-
-    // Smooth ring movement
+    // ring lags for trailing
+    ringTarget.x = ease(ringTarget.x ?? mouse.x, mouse.x, 0.16);
+    ringTarget.y = ease(ringTarget.y ?? mouse.y, mouse.y, 0.16);
     ring.style.transform = `translate3d(${ringTarget.x}px, ${ringTarget.y}px, 0) translate(-50%, -50%)`;
 
     requestAnimationFrame(loop);
   }
 
-  // Enhanced click effects
+  // Enhanced click effects (guarded)
   window.addEventListener('mousedown', ()=>{
-    dot.style.width = '20px';
-    dot.style.height = '20px';
-    ring.style.width = '30px';
-    ring.style.height = '30px';
-    
-    // Create ripple effect
+    if(dot) { dot.style.width = '20px'; dot.style.height = '20px'; }
+    if(ring){ ring.style.width = '30px'; ring.style.height = '30px'; }
+
+    // ripple
     const ripple = document.createElement('div');
     ripple.style.cssText = `position:fixed;left:${mouse.x}px;top:${mouse.y}px;width:10px;height:10px;border-radius:50%;border:2px solid var(--neon);pointer-events:none;z-index:9996;transform:translate(-50%,-50%);animation:clickRipple 0.6s ease-out forwards`;
     document.body.appendChild(ripple);
@@ -174,30 +170,26 @@ if (!isMobile) {
   });
 
   window.addEventListener('mouseup', ()=>{
-    dot.style.width = '12px';
-    dot.style.height = '12px';
-    ring.style.width = '40px';
-    ring.style.height = '40px';
+    if(dot){ dot.style.width = '12px'; dot.style.height = '12px'; }
+    if(ring){ ring.style.width = '40px'; ring.style.height = '40px'; }
   });
 
   // Hover effects on interactive elements
   const interactiveElements = 'a, button, .nav-link, .cta-primary, .cta-secondary, .link-card, .project-card, .cert-card, .skill-category, input, textarea';
   document.addEventListener('mouseover', (e) => {
-    if(e.target.matches(interactiveElements)) {
-      dot.style.width = '25px';
-      dot.style.height = '25px';
-      ring.style.width = '60px';
-      ring.style.height = '60px';
+    if(!e.target.matches) return;
+    if(e.target.matches(interactiveElements) && dot && ring) {
+      dot.style.width = '25px'; dot.style.height = '25px';
+      ring.style.width = '60px'; ring.style.height = '60px';
       ring.style.borderColor = 'var(--accent)';
     }
   });
 
   document.addEventListener('mouseout', (e) => {
-    if(e.target.matches(interactiveElements)) {
-      dot.style.width = '12px';
-      dot.style.height = '12px';
-      ring.style.width = '40px';
-      ring.style.height = '40px';
+    if(!e.target.matches) return;
+    if(e.target.matches(interactiveElements) && dot && ring) {
+      dot.style.width = '12px'; dot.style.height = '12px';
+      ring.style.width = '40px'; ring.style.height = '40px';
       ring.style.borderColor = 'var(--neon)';
     }
   });
@@ -209,6 +201,48 @@ if (!isMobile) {
     particles.length = 0;
   } else {
     loop();
+  }
+  
+  // Create a lightweight ambient-follow element that subtly follows the pointer (additive)
+  if(!isMobile && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    const ambientFollow = document.createElement('div');
+    ambientFollow.className = 'ambient-follow';
+    document.body.appendChild(ambientFollow);
+
+    let lastMoveAF = 0;
+    window.addEventListener('pointermove', (e)=>{
+      const now = Date.now();
+      if(now - lastMoveAF < 12) return; // throttle
+      lastMoveAF = now;
+      ambientFollow.style.transform = `translate3d(${e.clientX - 60}px, ${e.clientY - 60}px, 0)`;
+      ambientFollow.style.opacity = '0.14';
+    }, {passive:true});
+
+    // small particle burst on click for extra 'animative' feel (adds to existing click ripple/sparkles)
+    window.addEventListener('click', (e)=>{
+      if(window.innerWidth < 768) return;
+      for(let i=0;i<6;i++){
+        setTimeout(()=>{
+          const p = document.createElement('div');
+          p.style.position = 'fixed'; p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px';
+          p.style.width = p.style.height = (4 + Math.random()*6) + 'px';
+          p.style.borderRadius = '50%'; p.style.pointerEvents='none'; p.style.zIndex='998';
+          p.style.background = Math.random() > 0.5 ? 'rgba(0,255,225,0.9)' : 'rgba(255,68,204,0.9)';
+          p.style.boxShadow = '0 0 8px rgba(255,255,255,0.1)';
+          document.body.appendChild(p);
+          const angle = Math.random()*Math.PI*2; const v = 1 + Math.random()*2;
+          const start = Date.now(); const life = 420 + Math.random()*220;
+          (function anim(){
+            const t = Date.now() - start; const prog = t/life;
+            if(prog >= 1){ p.remove(); return; }
+            p.style.left = (e.clientX + Math.cos(angle)*v*t*0.06) + 'px';
+            p.style.top = (e.clientY + Math.sin(angle)*v*t*0.06) + 'px';
+            p.style.opacity = String(1 - prog);
+            requestAnimationFrame(anim);
+          })();
+        }, i*20);
+      }
+    }, {passive:true});
   }
 } // End of !isMobile check
 

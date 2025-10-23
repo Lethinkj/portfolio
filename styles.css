@@ -419,9 +419,14 @@ canvas#bg{position:fixed;inset:0;z-index:0}
 
 /* Hide native cursor on desktop/fine-pointer devices and use custom cursor */
 @media (pointer: fine) and (hover: hover) and (prefers-reduced-motion: no-preference){
-  body, #overlay { cursor: none !important; }
+  /* hide native cursor everywhere (including links/buttons) so the site's custom cursor is the only pointer
+     Use !important to override browser/user-agent defaults on interactive elements */
+  html, body, #overlay, * { cursor: none !important; }
+  a, button, input, textarea, select, label { cursor: none !important; }
+  /* Also try to override inline cursor styles if present */
+  [style*="cursor"]{ cursor: none !important; }
   /* ensure custom cursor elements are visible */
-  .cursor-dot, .cursor-ring { opacity: 1; pointer-events: none; }
+  .cursor-dot, .cursor-ring, .cursor-trail { opacity: 1; pointer-events: none; }
 }
 
 /* ============================================

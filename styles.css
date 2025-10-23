@@ -213,7 +213,39 @@ canvas#bg{position:fixed;inset:0;z-index:0}
 .link-card:hover::before{opacity:1}
 
 /* Nav Link Active State */
-.nav-link.active{color:var(--neon);text-shadow:0 0 10px rgba(0,255,225,0.5);font-weight:600}
+.nav-link.active{
+  color:var(--neon);
+  text-shadow:0 0 8px rgba(0,255,225,0.45);
+  font-weight:600;
+  position:relative;
+  /* disable any JS-driven animation (e.g., shadowExpand) */
+  animation: none !important;
+}
+
+.topbar nav a:focus{outline:none}
+
+/* Minimal neon underline instead of square highlight */
+.nav-link.active::after{
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(0,255,225,0.95), rgba(255,68,204,0.95));
+  box-shadow: 0 0 18px rgba(0,255,225,0.35), 0 0 8px rgba(255,68,204,0.12);
+  opacity: 0.95;
+  transition: all 0.25s ease;
+  animation: navUnderlinePulse 2.2s ease-in-out infinite;
+}
+
+@keyframes navUnderlinePulse{
+  0%{ transform: translateX(-50%) scaleX(0.95); box-shadow:0 0 8px rgba(0,255,225,0.2); }
+  50%{ transform: translateX(-50%) scaleX(1.05); box-shadow:0 0 20px rgba(0,255,225,0.45); }
+  100%{ transform: translateX(-50%) scaleX(0.95); box-shadow:0 0 8px rgba(0,255,225,0.2); }
+}
 
 /* Animations */
 @keyframes pulse{0%,100%{box-shadow:0 0 30px rgba(0,255,225,0.3),0 6px 40px rgba(0,0,0,0.6) inset}50%{box-shadow:0 0 50px rgba(0,255,225,0.5),0 6px 40px rgba(0,0,0,0.6) inset}}
@@ -847,9 +879,9 @@ h2{animation:glowTextPulse 2s ease-in-out infinite}
   .skill-category{padding:10px 10px;text-align:center !important;margin:0 auto;min-height:120px;display:flex;flex-direction:column;width:100%;max-width:420px}
   .skill-category h3{font-size:13px;margin-bottom:6px;text-align:center !important}
   .skill-list{gap:6px;justify-content:center;flex-wrap:wrap;flex:1}
-  .skill-list li{font-size:11px;padding:4px 8px;padding-left:12px}
-  /* mobile: shorten/disable rotate animation and bring bullet closer */
-  .skill-list li::before{left:4px;animation:none}
+  .skill-list li{font-size:11px;padding:4px 8px;padding-left:10px}
+  /* mobile: bring bullet closer and enable a short rotation */
+  .skill-list li::before{left:6px;animation:rotate360 1s linear infinite}
   .projects-grid{grid-template-columns:1fr;gap:10px;grid-auto-rows:1fr;justify-items:center;width:100%}
   .project-card{padding:12px;text-align:center !important;margin:0 auto;min-height:280px;display:flex;flex-direction:column;justify-content:space-between;width:100%;max-width:500px}
   .project-card h3{font-size:15px;margin-bottom:8px;text-align:center !important}

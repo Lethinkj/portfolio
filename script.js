@@ -223,6 +223,68 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
   });
 });
 
+// --- Interactive ambient backdrop: cursor enforcement + orb interactivity ---
+(function(){
+  // Prevent OS cursor from briefly appearing during pointer interactions
+  let cursorForced = false;
+  function setCursorNone(force){
+    if(force){
+      document.documentElement.style.cursor = 'none';
+      document.body.style.cursor = 'none';
+      cursorForced = true;
+    } else {
+      document.documentElement.style.cursor = '';
+      document.body.style.cursor = '';
+      cursorForced = false;
+    }
+  }
+
+  // Force hide during pointerdown/up on desktop
+  window.addEventListener('pointerdown', ()=> setCursorNone(true));
+  window.addEventListener('pointerup', ()=> setCursorNone(false));
+
+  // Ambient orb interactivity
+  const orbs = Array.from(document.querySelectorAll('.ambient-orb'));
+  if(orbs.length === 0) return;
+
+  // subtle parallax based on mouse position
+  let lastMove = 0;
+  window.addEventListener('mousemove', (e)=>{
+    const now = Date.now();
+    // throttle to ~60fps (no-op if firing faster)
+    if(now - lastMove < 8) return;
+    lastMove = now;
+
+    const cx = window.innerWidth/2;
+    const cy = window.innerHeight/2;
+    const nx = (e.clientX - cx) / cx; // -1..1
+    const ny = (e.clientY - cy) / cy;
+
+    orbs.forEach((orb, i)=>{
+      const depth = 1 + i*0.35; // different sensitivity
+      const tx = (nx * 12) / depth;
+      const ty = (ny * 12) / depth;
+      orb.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+    });
+  }, {passive:true});
+
+  // click pulse effect on orbs
+  function pulse(x, y){
+    orbs.forEach((orb, i)=>{
+      const el = orb;
+      el.animate([
+        { transform: el.style.transform || 'translate3d(0,0,0) scale(1)', opacity: el.style.opacity || 0.9 },
+        { transform: (el.style.transform || 'translate3d(0,0,0)') + ' scale(1.08)', opacity: 1 },
+        { transform: el.style.transform || 'translate3d(0,0,0) scale(1)', opacity: el.style.opacity || 0.9 }
+      ], { duration: 420 + i*60, easing: 'cubic-bezier(0.2,0.9,0.2,1)' });
+    });
+  }
+
+  window.addEventListener('click', (e)=>{
+    pulse(e.clientX, e.clientY);
+  });
+})();
+
 // Scroll animations for cards
 const observer = new IntersectionObserver((entries)=>{
   entries.forEach(entry => {

@@ -2,6 +2,8 @@
   --bg:#07030a;
   --neon:#00ffe1;
   --accent:#ff44cc;
+  --cursor-x: 50%;
+  --cursor-y: 50%;
   --muted:#9aa0b2;
   --dark:#0a0812;
 }
@@ -312,6 +314,14 @@ canvas#bg{position:fixed;inset:0;z-index:0}
 .ambient-orb.orb-1{width:220px;height:220px;background:radial-gradient(circle, rgba(0,255,225,0.22), rgba(0,255,225,0.02));left:5%;top:10%;animation:orbDrift1 28s ease-in-out infinite}
 .ambient-orb.orb-2{width:160px;height:160px;background:radial-gradient(circle, rgba(255,68,204,0.18), rgba(255,68,204,0.01));right:8%;top:30%;animation:orbDrift2 24s ease-in-out infinite}
 .ambient-orb.orb-3{width:100px;height:100px;background:radial-gradient(circle, rgba(255,255,255,0.12), rgba(255,255,255,0.01));left:50%;bottom:8%;animation:orbDrift3 32s ease-in-out infinite}
+
+/* Dynamic radial that follows the pointer via CSS variables (theme-oriented) */
+.dynamic-radial{
+  position:fixed;inset:0;z-index:0;pointer-events:none;mix-blend-mode:screen;opacity:0.85;transition:opacity 0.22s linear;
+  background:
+    radial-gradient(circle at var(--cursor-x,50%) var(--cursor-y,50%), rgba(0,255,225,0.08) 0%, rgba(0,255,225,0.03) 12%, transparent 28%),
+    radial-gradient(circle at calc(var(--cursor-x,50%) - 20px) calc(var(--cursor-y,50%) + 40px), rgba(255,68,204,0.06) 0%, rgba(255,68,204,0.02) 18%, transparent 36%);
+}
 
 @keyframes ambientShift{
   0%{transform:translate3d(0,0,0) scale(1)}

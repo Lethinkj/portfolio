@@ -251,6 +251,62 @@ if (!isMobile && !window.matchMedia('(prefers-reduced-motion: reduce)').matches)
   draw();
 }
 
+// Update CSS variables for cursor position to drive dynamic radial background
+;(function(){
+  if(typeof window === 'undefined') return;
+  const docEl = document.documentElement;
+  let last = 0;
+  let idleTimer = null;
+
+  function setCursorVars(x, y){
+    // set as percentages to work with CSS radial gradients
+    const px = Math.round((x / window.innerWidth) * 10000) / 100 + '%';
+    const py = Math.round((y / window.innerHeight) * 10000) / 100 + '%';
+    docEl.style.setProperty('--cursor-x', px);
+    docEl.style.setProperty('--cursor-y', py);
+  }
+
+  // throttle and bind
+  function onPointer(e){
+    const now = Date.now();
+    if(now - last < 12) return; last = now;
+    setCursorVars(e.clientX, e.clientY);
+
+    // clear idle auto-oscillate while user moves
+    if(idleTimer){ clearTimeout(idleTimer); idleTimer = null; }
+    idleTimer = setTimeout(()=>{
+      // slowly oscillate when idle
+      let t0 = Date.now();
+      const amp = 6; // percent offset
+      function oscillate(){
+        const t = (Date.now() - t0)/1000;
+        const x = (50 + Math.sin(t*0.6) * amp);
+        const y = (50 + Math.cos(t*0.45) * (amp*0.6));
+        docEl.style.setProperty('--cursor-x', x + '%');
+        docEl.style.setProperty('--cursor-y', y + '%');
+        idleTimer = requestAnimationFrame(oscillate);
+      }
+      idleTimer = requestAnimationFrame(oscillate);
+    }, 900);
+  }
+
+  window.addEventListener('pointermove', onPointer, {passive:true});
+  window.addEventListener('mousemove', onPointer, {passive:true});
+
+  // Create default ambient orbs if none exist (keeps background rich on pages missing markup)
+  if(document.querySelectorAll('.ambient-orb').length === 0){
+    const ab = document.querySelector('.ambient-backdrop') || document.body;
+    const orb1 = document.createElement('div'); orb1.className='ambient-orb orb-1'; orb1.style.left='6%'; orb1.style.top='8%'; ab.appendChild(orb1);
+    const orb2 = document.createElement('div'); orb2.className='ambient-orb orb-2'; orb2.style.right='8%'; orb2.style.top='28%'; ab.appendChild(orb2);
+    const orb3 = document.createElement('div'); orb3.className='ambient-orb orb-3'; orb3.style.left='50%'; orb3.style.bottom='6%'; ab.appendChild(orb3);
+  }
+
+  // Add dynamic radial container if not present
+  if(!document.querySelector('.dynamic-radial')){
+    const dyn = document.createElement('div'); dyn.className='dynamic-radial'; document.body.appendChild(dyn);
+  }
+})();
+
 // set year
 document.getElementById('year').textContent = new Date().getFullYear();
 

@@ -343,10 +343,11 @@ canvas#bg{position:fixed;inset:0;z-index:0}
   z-index:9999;
   /* Use transform for positioning (GPU accelerated) */
   will-change: transform, opacity;
-  transition:opacity 0.15s ease, width 0.15s ease, height 0.15s ease;
+  transition:opacity 0.12s ease, width 0.15s ease, height 0.15s ease;
   background:radial-gradient(circle,var(--neon) 0%,var(--accent) 50%,transparent 70%);
-  box-shadow:0 0 20px var(--neon),0 0 40px var(--neon),0 0 60px var(--accent);
-  animation:cursorPulse 2s ease-in-out infinite;
+  box-shadow:0 0 20px var(--neon),0 0 36px rgba(0,255,225,0.55),0 0 48px rgba(255,68,204,0.12);
+  /* remove transform animation so JS can fully control position via inline styles */
+  animation: cursorGlow 1.8s ease-in-out infinite;
   transform:translate3d(0,0,0);
 }
 
@@ -381,6 +382,13 @@ canvas#bg{position:fixed;inset:0;z-index:0}
 @keyframes cursorPulse{
   0%,100%{transform:translate(-50%,-50%) scale(1);opacity:1}
   50%{transform:translate(-50%,-50%) scale(1.3);opacity:0.8}
+}
+
+/* Keep JS in charge of positioning; animate glow (box-shadow & opacity) only */
+@keyframes cursorGlow{
+  0%{opacity:1;box-shadow:0 0 12px rgba(0,255,225,0.95),0 0 28px rgba(0,255,225,0.4)}
+  50%{opacity:0.85;box-shadow:0 0 8px rgba(0,255,225,0.6),0 0 18px rgba(0,255,225,0.2)}
+  100%{opacity:1;box-shadow:0 0 12px rgba(0,255,225,0.95),0 0 28px rgba(0,255,225,0.4)}
 }
 
 @keyframes cursorRotate{

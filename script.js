@@ -102,15 +102,15 @@ if (!isMobile) {
   function ease(a,b,n){return (1-n)*a + n*b}
 
   function loop(){
-    pos.x = ease(pos.x, mouse.x, 0.25);
-    pos.y = ease(pos.y, mouse.y, 0.25);
-    ringTarget.x = ease(ringTarget.x, mouse.x, 0.12);
-    ringTarget.y = ease(ringTarget.y, mouse.y, 0.12);
+    // More responsive easing to mimic native cursor feel
+    pos.x = ease(pos.x, mouse.x, 0.45);
+    pos.y = ease(pos.y, mouse.y, 0.45);
+    ringTarget.x = ease(ringTarget.x, mouse.x, 0.18);
+    ringTarget.y = ease(ringTarget.y, mouse.y, 0.18);
 
-    dot.style.left = pos.x + 'px';
-    dot.style.top = pos.y + 'px';
-    ring.style.left = ringTarget.x + 'px';
-    ring.style.top = ringTarget.y + 'px';
+    // Use transform for smooth GPU-accelerated movement
+    dot.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0) translate(-50%, -50%)`;
+    ring.style.transform = `translate3d(${ringTarget.x}px, ${ringTarget.y}px, 0) translate(-50%, -50%)`;
 
     requestAnimationFrame(loop);
   }

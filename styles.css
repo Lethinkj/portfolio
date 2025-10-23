@@ -341,11 +341,13 @@ canvas#bg{position:fixed;inset:0;z-index:0}
   border-radius:50%;
   pointer-events:none;
   z-index:9999;
-  transition:width 0.3s ease,height 0.3s ease,opacity 0.3s ease;
+  /* Use transform for positioning (GPU accelerated) */
+  will-change: transform, opacity;
+  transition:opacity 0.15s ease, width 0.15s ease, height 0.15s ease;
   background:radial-gradient(circle,var(--neon) 0%,var(--accent) 50%,transparent 70%);
   box-shadow:0 0 20px var(--neon),0 0 40px var(--neon),0 0 60px var(--accent);
   animation:cursorPulse 2s ease-in-out infinite;
-  transform:translate(-50%,-50%);
+  transform:translate3d(0,0,0);
 }
 
 .cursor-ring{
@@ -356,8 +358,8 @@ canvas#bg{position:fixed;inset:0;z-index:0}
   pointer-events:none;
   z-index:9998;
   border:2px solid var(--neon);
-  transform:translate(-50%,-50%);
-  transition:all 0.2s cubic-bezier(0.25,0.46,0.45,0.94);
+  will-change: transform, width, height;
+  transition:opacity 0.18s ease, width 0.18s ease, height 0.18s ease;
   box-shadow:0 0 15px var(--neon),inset 0 0 15px rgba(0,255,225,0.3);
   animation:cursorRotate 4s linear infinite,cursorBreath 3s ease-in-out infinite;
 }
@@ -402,6 +404,13 @@ canvas#bg{position:fixed;inset:0;z-index:0}
 /* Retro scanlines */
 @media (prefers-reduced-motion: no-preference){
   body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(transparent 50%, rgba(255,255,255,0.02) 51%);background-size:100% 4px;pointer-events:none;z-index:1}
+}
+
+/* Hide native cursor on desktop/fine-pointer devices and use custom cursor */
+@media (pointer: fine) and (hover: hover) and (prefers-reduced-motion: no-preference){
+  body, #overlay { cursor: none !important; }
+  /* ensure custom cursor elements are visible */
+  .cursor-dot, .cursor-ring { opacity: 1; pointer-events: none; }
 }
 
 /* ============================================

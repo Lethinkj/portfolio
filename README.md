@@ -62,50 +62,31 @@ Edit `:root` variables in `styles.css`:
 
 ### Adjust animations
 - Particle count: `script.js` line ~15 (PT variable)
-- Animation speed: `styles.css` keyframes
-- Cursor follower easing: `script.js` line ~85 (ease function)
+# Retro Ambient Portfolio — Quick README
 
-## 📱 Responsive Breakpoints
+A small static portfolio built with vanilla HTML, CSS and JavaScript. Theme: retro neon / ambient.
 
-- **480px and below** – Mobile layout, single column
-- **768px** – Tablet layout, optimized spacing
-- **1024px and above** – Desktop layout, full grid
+What it contains
 
-## ♿ Accessibility
+- `index.html`, `about.html`, `projects.html`, `certifications.html`, `contact.html`
+- `styles.css` — site styles, responsive, animations, and theme variables
+- `script.js` — canvas ambient background, custom cursor, scroll and touch interactivity
 
-- Respects `prefers-reduced-motion` for users with vestibular disorders
-- Keyboard navigation with visible focus outlines
-- ARIA labels for semantic HTML
-- Color contrast WCAG AA compliant
+Quick start
 
-## 📦 Files
+- Open `index.html` directly in a browser, or run a simple static server.
 
-```
-d:\portfolio\
-├── index.html       # Main HTML structure
-├── styles.css       # All styling & animations
-├── script.js        # Canvas, cursor follower, scroll effects
-├── package.json     # Node scripts & metadata
-└── README.md        # This file
+Recommended local server (if you have Node):
+
+```powershell
+npx serve . -p 3000
+# then visit http://localhost:3000
 ```
 
-## 🎨 Design Inspiration
+Notes
 
-The design draws from:
-- **CRT/VHS aesthetics** – Retro scanlines and glitch-like effects
-- **Cyberpunk aesthetics** – Neon glows and dark backgrounds
-- **Motion design** – Smooth easing functions and layered animations
-- **Modern web standards** – CSS Grid, Flexbox, Canvas API
+- Animations respect `prefers-reduced-motion`.
+- On desktop the custom cursor (dot + ring) will be shown; on mobile the site adapts and the background reacts to touch/swipe.
+- The dynamic radial and ambient orbs are enabled across all pages.
 
-## 🔗 Links
-
-- **LinkedIn**: https://www.linkedin.com/in/lethin-k-j-510674293
-- **Project**: BashXCode at https://bashxcode.vercel.app
-
-## 📄 License
-
-MIT – Feel free to use and modify for your own portfolio!
-
----
-
-**Built with vanilla HTML, CSS, and JavaScript. No frameworks, pure ambient vibes.** ✨
+License: MIT

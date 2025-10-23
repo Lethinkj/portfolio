@@ -126,6 +126,20 @@ if (!isMobile) {
     }
   }, {passive:true});
 
+  // Restore last cursor position from sessionStorage (so cursor appears at same place across navigation)
+  try{
+    const last = sessionStorage.getItem('lastCursorPos');
+    if(last){
+      const {x,y} = JSON.parse(last);
+      if(typeof x === 'number' && typeof y === 'number'){
+        mouse.x = x; mouse.y = y; ringTarget.x = x; ringTarget.y = y; firstMove = false;
+        dot.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+        ring.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+        dot.style.opacity = '1'; ring.style.opacity = '1'; dot.style.visibility='visible'; ring.style.visibility='visible';
+      }
+    }
+  }catch(e){/* ignore storage errors */}
+
   function ease(a,b,n){return (1-n)*a + n*b}
 
   function loop(){
@@ -250,6 +264,37 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
     }
   });
 });
+
+// Save cursor position before navigating away or on internal link clicks
+function saveCursor(){
+  try{
+    // Prefer reading from the rendered cursor if available
+    const dotEl = document.querySelector('.cursor-dot');
+    if(dotEl){
+      const r = dotEl.getBoundingClientRect();
+      const cx = Math.round(r.left + r.width/2);
+      const cy = Math.round(r.top + r.height/2);
+      sessionStorage.setItem('lastCursorPos', JSON.stringify({x: cx, y: cy}));
+      return;
+    }
+    // fallback to in-memory mouse if present
+    if(typeof mouse !== 'undefined' && mouse && mouse.x != null){
+      sessionStorage.setItem('lastCursorPos', JSON.stringify({x: mouse.x, y: mouse.y}));
+    }
+  }catch(e){}
+}
+
+// attach to internal links
+document.querySelectorAll('a[href]').forEach(a => {
+  const href = a.getAttribute('href');
+  if(href && !href.startsWith('http') && !href.startsWith('mailto:') && !href.startsWith('#')){
+    a.addEventListener('click', saveCursor);
+  }
+});
+
+window.addEventListener('beforeunload', saveCursor);
+window.addEventListener('pagehide', saveCursor);
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState === 'hidden') saveCursor(); });
 
 // --- Interactive ambient backdrop: cursor enforcement + orb interactivity ---
 (function(){

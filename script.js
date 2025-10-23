@@ -76,19 +76,28 @@ const isMobile = window.matchMedia('(max-width: 768px)').matches || 'ontouchstar
 if (!isMobile) {
   const dot = document.createElement('div'); dot.className='cursor-dot';
   const ring = document.createElement('div'); ring.className='cursor-ring';
+  // start hidden until first pointer movement to avoid top-left origin
+  dot.style.opacity = '0';
+  ring.style.opacity = '0';
   document.body.appendChild(dot); document.body.appendChild(ring);
 
-  let mouse = {x: 20, y: 20}; // Start from top corner instead of center
+  let mouse = {x: null, y: null}; // will be set on first pointermove
   let pos = {x:mouse.x, y:mouse.y};
   let ringTarget = {x:mouse.x, y:mouse.y};
   let trailTimer = 0;
+  let firstMove = true;
 
   window.addEventListener('mousemove',(e)=>{
     mouse.x = e.clientX; mouse.y = e.clientY;
 
-    // Move the small dot immediately for native-like responsiveness
-    if(dot) {
-      dot.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`;
+    // On the first move, reveal & position the dot and ring exactly at the pointer
+    if(firstMove){
+      firstMove = false;
+      if(dot){ dot.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`; dot.style.opacity = '1'; }
+      if(ring){ ring.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`; ring.style.opacity = '1'; }
+    } else {
+      // Move the small dot immediately for native-like responsiveness
+      if(dot) dot.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`;
     }
 
     // Create trail effect every few frames

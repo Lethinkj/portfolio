@@ -85,7 +85,12 @@ if (!isMobile) {
 
   window.addEventListener('mousemove',(e)=>{
     mouse.x = e.clientX; mouse.y = e.clientY;
-    
+
+    // Move the small dot immediately for native-like responsiveness
+    if(dot) {
+      dot.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`;
+    }
+
     // Create trail effect every few frames
     trailTimer++;
     if(trailTimer % 3 === 0) {
@@ -102,14 +107,11 @@ if (!isMobile) {
   function ease(a,b,n){return (1-n)*a + n*b}
 
   function loop(){
-    // More responsive easing to mimic native cursor feel
-    pos.x = ease(pos.x, mouse.x, 0.45);
-    pos.y = ease(pos.y, mouse.y, 0.45);
-    ringTarget.x = ease(ringTarget.x, mouse.x, 0.18);
-    ringTarget.y = ease(ringTarget.y, mouse.y, 0.18);
+    // Ring should lag slightly for a trailing effect; dot is positioned directly on mousemove for immediate response
+    ringTarget.x = ease(ringTarget.x, mouse.x, 0.16);
+    ringTarget.y = ease(ringTarget.y, mouse.y, 0.16);
 
-    // Use transform for smooth GPU-accelerated movement
-    dot.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0) translate(-50%, -50%)`;
+    // Smooth ring movement
     ring.style.transform = `translate3d(${ringTarget.x}px, ${ringTarget.y}px, 0) translate(-50%, -50%)`;
 
     requestAnimationFrame(loop);

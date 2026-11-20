@@ -1,99 +1,67 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="Lethin K J — Full-stack developer, maker, and open-source enthusiast." />
-  <title>Lethin K J — Home</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
-  <link rel="shortcut icon" href="/assets/favicon.ico">
-  <link rel="manifest" href="/site.webmanifest">
-  <meta name="msapplication-TileColor" content="#07030a">
-  <meta name="theme-color" content="#07030a">
-</head>
-<body>
-  <canvas id="bg"></canvas>
-  
-  <div id="overlay" role="main">
-    <header class="topbar">
-      <h1 class="logo">Lethin K J</h1>
-      <nav>
-        <a href="index.html" class="nav-link active">Home</a>
-        <a href="about.html" class="nav-link">About</a>
-        <a href="skills.html" class="nav-link">Skills</a>
-        <a href="projects.html" class="nav-link">Projects</a>
-        <a href="certifications.html" class="nav-link">Certifications</a>
-        <a href="contact.html" class="nav-link">Contact</a>
-      </nav>
-    </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <section id="hero" class="card hero-section fade-in">
-      <div class="hero-content">
-        <div class="hero-text">
-          <div class="hero-title-wrapper">
-            <h1 class="hero-title">Hi,<br>I'm <span class="name-highlight">Lethin</span></h1>
-            <div class="hero-visual-inline">
-              <div class="profile-image-container">
-                <img src="/assets/image-1760874801821.jpeg" alt="Lethin K J Profile" class="profile-image">
-              </div>
-            </div>
-          </div>
-          <p class="hero-subtitle">Full-Stack Developer • Maker • Creative Technologist</p>
-          <p class="hero-description">Building ambient digital experiences where code meets creativity. Passionate about web development, embedded systems, and open-source innovation.</p>
-          <div class="hero-cta">
-            <a href="projects.html" class="cta-primary sparkle-effect">Explore My Work ↓</a>
-            <a href="contact.html" class="cta-secondary">Get in Touch</a>
-          </div>
-        </div>
-        <div class="hero-visual hero-visual-desktop">
-            <div class="profile-image-container">
-            <img src="/assets/image-1760874801821.jpeg" alt="Lethin K J Profile" class="profile-image">
-          </div>
-        </div>
-      </div>
-    </section>
+    <title>Lethin K J - Full-Stack Developer</title>
+    <meta
+      name="description"
+      content="Lethin K J — Full-stack developer, maker, and open-source enthusiast. Building ambient digital experiences where code meets creativity."
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://lethin-kj.github.io/" />
 
-    <section class="card page-section fade-in">
-      <h2>Explore My Portfolio</h2>
-      <div class="link-grid">
-        <a href="about.html" class="link-card">
-          <div style="font-size:28px;margin-bottom:8px">📝</div>
-          <h3>About Me</h3>
-          <p>Learn about my background and passion</p>
-        </a>
-        <a href="skills.html" class="link-card">
-          <div style="font-size:28px;margin-bottom:8px">🎯</div>
-          <h3>Skills</h3>
-          <p>29 skills across 5 categories</p>
-        </a>
-        <a href="projects.html" class="link-card">
-          <div style="font-size:28px;margin-bottom:8px">🚀</div>
-          <h3>Projects</h3>
-          <p>See my featured work</p>
-        </a>
-        <a href="certifications.html" class="link-card">
-          <div style="font-size:28px;margin-bottom:8px">📜</div>
-          <h3>Certifications</h3>
-          <p>9 professional certifications</p>
-        </a>
-        <a href="contact.html" class="link-card">
-          <div style="font-size:28px;margin-bottom:8px">💬</div>
-          <h3>Contact</h3>
-          <p>Get in touch with me</p>
-        </a>
-      </div>
-    </section>
+    <meta property="og:title" content="Lethin K J - Full-Stack Developer" />
+    <meta
+      property="og:description"
+      content="Lethin K J — Full-stack developer, maker, and open-source enthusiast. Building ambient digital experiences where code meets creativity."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://lethin-kj.github.io/" />
+    <meta property="og:image" content="/assets/image-1760874801821.jpeg" />
 
-    <footer class="footer">
-      <small>© <span id="year"></span> Lethin K J</small>
-    </footer>
-  </div>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Lethin K J - Full-Stack Developer" />
+    <meta
+      name="twitter:description"
+      content="Lethin K J — Full-stack developer, maker, and open-source enthusiast. Building ambient digital experiences where code meets creativity."
+    />
+    <meta name="twitter:image" content="/assets/image-1760874801821.jpeg" />
 
-  <script src="script.js" defer></script>
-</body>
+    <link rel="preload" href="/fonts/urbanist-400.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="/fonts/urbanist-700.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="/fonts/urbanist-900.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="/fonts/pro-font-windows-400.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="/fonts/pro-font-windows-700.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
+    <link rel="icon" type="image/png" href="/meta/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/meta/favicon.svg" />
+    <link rel="shortcut icon" href="/meta/favicon.ico" />
+
+    <meta name="theme-color" content="#dfd1bc" />
+  </head>
+  <body class="is-loading">
+    <svg style="display: none" viewBox="0 0 56 61" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <path
+          id="logo-path"
+          d="M3 14 24 2C28 0 28 0 32 2L53 14C56 16 56 17 56 19L56 43C56 46 55 47 51 49L32 59C28 61 28 61 24 59L5 49C1 47 0 46 0 43L0 19C0 17 0 16 3 14M28 4 5 17 28 28 51 17 28 4M53 20 30 31 30 56 53 44 53 20M40 42 33 35C33 35 32 34 33 33 34 32 35 33 36 34L36 34 43 41C44 42 44 42 43 43L35 51C35 51 34 52 33 51 32 50 33 49 33 49L40 42M16 42 23 35C23 35 24 34 23 33 22 32 21 33 20 34L13 41C12 42 12 42 13 43L21 51C21 51 22 52 23 51 24 50 23 49 23 49L16 42"
+        ></path>
+      </defs>
+    </svg>
+    <div id="app"></div>
+    <div class="preloader">
+      <svg class="preloader-svg" viewBox="0 0 56 61" xmlns="http://www.w3.org/2000/svg">
+        <mask id="preloader-mask">
+          <rect fill="black" height="61" width="61"></rect>
+          <rect fill="white" height="61" width="61" class="preloader-rect" style="transform: scaleY(0)"></rect>
+        </mask>
+
+        <use href="#logo-path" class="preloader-path" opacity="0.3"></use>
+        <use href="#logo-path" class="preloader-path" mask="url(#preloader-mask)"></use>
+      </svg>
+    </div>
+    <script type="module" src="./src/main.ts"></script>
+  </body>
 </html>
